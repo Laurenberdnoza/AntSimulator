@@ -38,7 +38,7 @@ public class World implements Updatable, Displayable {
     }
 
     private void displayGround() {
-        Main.getApp().background(80, 40, 15);
+        Main.getApp().background(80, 40, 15);  // Brown.
     }
 
     public boolean inBounds(PVector position) {
