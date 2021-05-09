@@ -1,5 +1,6 @@
 package antsimulation;
 
+import antsimulation.world.World;
 import processing.core.PApplet;
 
 public class Main extends PApplet {
@@ -23,7 +24,7 @@ public class Main extends PApplet {
 
     public void draw() {
         world.update();
-        world.draw();
+        world.display();
     }
 
     public static PApplet getApp() {
