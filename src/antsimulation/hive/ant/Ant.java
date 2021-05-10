@@ -1,4 +1,4 @@
-package antsimulation.ant;
+package antsimulation.hive.ant;
 
 import antsimulation.Main;
 import antsimulation.world.Displayable;
@@ -15,8 +15,8 @@ public class Ant implements Updatable, Displayable {
     private final PVector pos;
     private final PVector movement = PVector.random2D().setMag(movementSpeed / Main.getApp().frameRate);
 
-    public Ant(float x, float y) {
-        this.pos = new PVector(x, y);
+    public Ant(PVector startingLocation) {
+        this.pos = startingLocation.copy();
     }
 
     public void update() {
