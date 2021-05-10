@@ -9,7 +9,8 @@ public class Food implements Locatable, Displayable {
 
     private static final float RADIUS = 2f;
 
-    private final PVector pos;
+    private PVector pos;
+    private boolean carried = false;
 
     public Food(PVector position) {
         this.pos = position;
@@ -24,5 +25,17 @@ public class Food implements Locatable, Displayable {
     @Override
     public PVector getLocation() {
         return pos.copy();
+    }
+
+    public boolean isCarried() {
+        return carried;
+    }
+
+    public void setCarried(boolean carried) {
+        this.carried = carried;
+    }
+
+    public void setPosition(PVector position) {
+        this.pos = position;
     }
 }
