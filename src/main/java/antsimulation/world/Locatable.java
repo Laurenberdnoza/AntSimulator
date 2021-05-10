@@ -4,5 +4,5 @@ import processing.core.PVector;
 
 public interface Locatable {
 
-    public PVector getLocation();
+    PVector getLocation();
 }

@@ -1,12 +1,15 @@
 package antsimulation.world;
 
 import antsimulation.Main;
+import antsimulation.hive.ant.pheromone.Pheromone;
 import antsimulation.world.food.Food;
 import antsimulation.world.spawner.Spawner;
+import com.github.ryanp102694.QuadTree;
+import com.github.ryanp102694.geometry.RectangleObject;
 import processing.core.PVector;
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class World implements Updatable, Displayable {
 
@@ -14,14 +17,19 @@ public class World implements Updatable, Displayable {
     private static final int HEIGHT = 800;
 
     private final Spawner spawner = new Spawner(this);
+    private final QuadTree quadTree = new QuadTree();
 
-    private final Set<Displayable> displayables = new HashSet<>();
-    private final Set<Updatable> updatables = new HashSet<>();
-
-    private final Set<Food> food = new HashSet<>();
+    private final Set<Displayable> displayables = ConcurrentHashMap.newKeySet();
+    private final Set<Updatable> updatables = ConcurrentHashMap.newKeySet();
 
     public void update() {
-        for (Updatable updatable : updatables) updatable.update();
+        for (Updatable updatable : updatables) {
+            updatable.update();
+            if (updatable instanceof Removable && ((Removable) updatable).isToBeRemoved()) {
+                updatables.remove(updatable);
+                if (displayables.contains((Displayable) updatable)) displayables.remove(updatable);
+            }
+        }
     }
 
     public void display() {
@@ -65,14 +73,14 @@ public class World implements Updatable, Displayable {
     public void addEntity(Object entity) {
         if (entity instanceof Displayable) displayables.add((Displayable) entity);
         if (entity instanceof Updatable) updatables.add((Updatable) entity);
-        if (entity instanceof Food) food.add((Food) entity);
+        if (entity instanceof Food || entity instanceof Pheromone) quadTree.addRectangleObject((RectangleObject) entity);
     }
 
     public Spawner getSpawner() {
         return spawner;
     }
 
-    public Set<Food> getFood() {
-        return food;
+    public QuadTree getQuadTree() {
+        return quadTree;
     }
 }

@@ -3,13 +3,12 @@ package antsimulation.hive;
 import antsimulation.Main;
 import antsimulation.hive.ant.Ant;
 import antsimulation.world.Displayable;
-import antsimulation.world.Locatable;
 import processing.core.PVector;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class Hive implements Displayable, Locatable {
+public class Hive implements Displayable {
 
     private static final float WIDTH = 32f;
 
@@ -30,7 +29,7 @@ public class Hive implements Displayable, Locatable {
     }
 
     private void spawnAnt() {
-        Ant newAnt = new Ant(location.copy());
+        Ant newAnt = new Ant(location.copy().add(PVector.random2D().setMag(Main.getApp().random(0, WIDTH))));
         ownedAnts.add(newAnt);
         Main.getWorld().addEntity(newAnt);
     }
@@ -40,10 +39,4 @@ public class Hive implements Displayable, Locatable {
         Main.getApp().fill(20, 10, 2);
         Main.getApp().circle(location.x, location.y, WIDTH);
     }
-
-    @Override
-    public PVector getLocation() {
-        return null;
-    }
-
 }
