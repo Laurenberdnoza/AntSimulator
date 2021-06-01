@@ -5,7 +5,7 @@ import processing.core.PVector;
 
 public class HomePheromone extends Pheromone {
 
-    private static final float LIFE_TIME = 8f;
+    private static final float LIFE_TIME = 5f;
 
     public HomePheromone(PVector pos) {
         super(pos.copy(), LIFE_TIME, Type.HOME);

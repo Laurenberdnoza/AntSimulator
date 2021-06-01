@@ -14,13 +14,15 @@ public class World implements Updatable, Displayable {
 
     private static final int WIDTH = 800;
     private static final int HEIGHT = 800;
-    private static final int GRID_DOWNSCALE_FACTOR = 4;
+    private static final int GRID_DOWNSCALE_FACTOR = 8;
 
     private final Grid grid = new Grid(this, WIDTH / GRID_DOWNSCALE_FACTOR, HEIGHT / GRID_DOWNSCALE_FACTOR);
     private final Spawner spawner = new Spawner(this);
 
     private final Set<Ant> ants = ConcurrentHashMap.newKeySet();
     private final Set<Hive> hives = ConcurrentHashMap.newKeySet();
+
+    // TODO make adding pheromone to grid node not create a new object
 
     public void update() {
         for (Ant ant : ants) ant.update();
