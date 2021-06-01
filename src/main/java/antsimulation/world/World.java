@@ -25,7 +25,6 @@ public class World implements Updatable, Displayable {
     public void update() {
         for (Ant ant : ants) ant.update();
         grid.update();
-        System.out.println(grid.getPheromoneCount());
     }
 
     public void display() {
