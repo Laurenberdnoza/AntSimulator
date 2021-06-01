@@ -5,23 +5,29 @@ import antsimulation.world.Displayable;
 import antsimulation.world.Locatable;
 import antsimulation.world.Removable;
 import antsimulation.world.Updatable;
-import com.github.ryanp102694.geometry.RectangleObject;
 import processing.core.PVector;
 
 import static java.lang.Math.max;
 
-public abstract class Pheromone implements Locatable, Displayable, Updatable, Removable, RectangleObject {
+public abstract class Pheromone implements Locatable, Displayable, Updatable, Removable {
+
+    public enum Type {
+        FOOD, HOME
+    }
 
     private String id;
-    private String type = "food";
+    private String quadTreeType = "food";
 
-    protected float radius = 4f;
+    private final Type pheromoneType;
+
+    protected float radius = 8f;
     protected PVector pos;
     protected float lifeTime;
 
-    public Pheromone(PVector pos, float lifeTime) {
+    public Pheromone(PVector pos, float lifeTime, Type type) {
         this.pos = pos;
         this.lifeTime = lifeTime;
+        this.pheromoneType = type;
     }
 
     @Override
@@ -36,6 +42,10 @@ public abstract class Pheromone implements Locatable, Displayable, Updatable, Re
     }
 
     protected abstract void onUpdate();
+
+    public Type getPheromoneType() {
+        return pheromoneType;
+    }
 
     @Override
     public PVector getLocation() {
@@ -54,12 +64,12 @@ public abstract class Pheromone implements Locatable, Displayable, Updatable, Re
 
     @Override
     public String getType() {
-        return type;
+        return quadTreeType;
     }
 
     @Override
     public void setType(String s) {
-        type = s;
+        quadTreeType = s;
     }
 
     @Override

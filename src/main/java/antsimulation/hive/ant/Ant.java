@@ -8,26 +8,28 @@ import antsimulation.util.MockRectangleObject;
 import antsimulation.world.Displayable;
 import antsimulation.world.Locatable;
 import antsimulation.world.Updatable;
-import antsimulation.world.food.Food;
+import antsimulation.world.objects.food.Food;
 import com.github.ryanp102694.geometry.RectangleObject;
 import processing.core.PVector;
 
 import static java.lang.Math.max;
 
+@SuppressWarnings("SuspiciousNameCombination")
 public class Ant implements Updatable, Displayable, Locatable, RectangleObject {
 
     private static final float TURN_AMOUNT = 20f;
-    private static final float PHEROMONE_COOLDOWN = 2f;
-    private static final float PHEROMONE_DETECTION_SIZE = 10f;
-    private static final float ATTRACTION_MAGNITUDE = 2f;
+    private static final float PHEROMONE_COOLDOWN = 4f;
+    private static final float ANTENNA_LENGTH = 2f;
+    private static final float ANTENNA_ANGLE = 30f;
+    private static final float ANTENNA_PERCEPTION_WIDTH = 2f;
+    private static final float ATTRACTION_STRENGTH = 5f;
 
     private final float movementSpeed = 35f;
 
     private final PVector pos;
     private final PVector movement = PVector.random2D().setMag(movementSpeed / Main.getApp().frameRate);
-    private final PVector attraction = new PVector(0f, 0f);
     private float radius = 2f;
-    private float timeUntilPheromoneDeposit = PHEROMONE_COOLDOWN;
+    private float timeUntilPheromoneDeposit;
 
     private String id;
     private String type;
@@ -36,31 +38,73 @@ public class Ant implements Updatable, Displayable, Locatable, RectangleObject {
 
     public Ant(PVector startingLocation) {
         this.pos = startingLocation.copy();
+        this.timeUntilPheromoneDeposit = getPheromoneCooldown();
     }
 
     @Override
     public void update() {
         if (carriedFood != null) {
             carryFood();
-            depositPheromone(new FoodPheromone(this.pos));
+            attemptToDepositPheromone(new FoodPheromone(this.pos));
         } else {
             checkForFood();
-            depositPheromone(new HomePheromone(this.pos));
+            attemptToDepositPheromone(new HomePheromone(this.pos));
         }
         turn();
         move();
+        regenerate();
+    }
+
+    private void regenerate() {
         timeUntilPheromoneDeposit = max(0, timeUntilPheromoneDeposit - (1 / Main.getApp().frameRate));
     }
 
-    private void depositPheromone(Pheromone pheromone) {
+    private void attemptToDepositPheromone(Pheromone pheromone) {
         if (timeUntilPheromoneDeposit == 0) {
-            timeUntilPheromoneDeposit = PHEROMONE_COOLDOWN;
+            timeUntilPheromoneDeposit = getPheromoneCooldown();
             Main.getWorld().addEntity(pheromone);
         }
     }
 
+    private float getPheromoneCooldown() {
+        final float varianceRangeStart = 0.5f;
+        final float varianceRangeEnd = 1.5f;
+        final float randomCoolDownFactor = Main.getApp().random(varianceRangeStart, varianceRangeEnd);
+        return randomCoolDownFactor * PHEROMONE_COOLDOWN;
+    }
+
     private void turn() {
+        if (carriedFood != null) beAttractedTo(Pheromone.Type.HOME);
+        else beAttractedTo(Pheromone.Type.FOOD);
+
+        // Apply some randomness too.
         movement.rotate(Main.getApp().random(-TURN_AMOUNT / Main.getApp().frameRate, TURN_AMOUNT / Main.getApp().frameRate));
+    }
+
+    private void beAttractedTo(Pheromone.Type pheromoneType) {
+        PVector forward = new PVector(movement.x, movement.y).setMag(movement.mag() + ANTENNA_LENGTH);
+        PVector left = forward.copy().rotate(ANTENNA_ANGLE);
+        PVector right = forward.copy().rotate(-ANTENNA_ANGLE);
+
+        MockRectangleObject leftQuery = new MockRectangleObject(left.x, left.y, ANTENNA_PERCEPTION_WIDTH, ANTENNA_PERCEPTION_WIDTH);
+        MockRectangleObject rightQuery = new MockRectangleObject(right.x, right.y, ANTENNA_PERCEPTION_WIDTH, ANTENNA_PERCEPTION_WIDTH);
+
+        float leftAttraction = probeArea(leftQuery, pheromoneType);
+        float rightAttraction = probeArea(rightQuery, pheromoneType);
+
+        movement.rotate(leftAttraction - rightAttraction);
+    }
+
+    private float probeArea(MockRectangleObject queryArea, Pheromone.Type pheromoneType) {
+        float total = 0;
+
+        for (RectangleObject obj : Main.getWorld().getPheromones().search(queryArea)) {
+            if (((Pheromone) obj).getPheromoneType() == pheromoneType) {
+                total += ATTRACTION_STRENGTH;
+            }
+        }
+
+        return total;
     }
 
     private void move() {
@@ -71,9 +115,10 @@ public class Ant implements Updatable, Displayable, Locatable, RectangleObject {
     }
 
     private void checkForFood() {
-        for (RectangleObject obj : Main.getWorld().getQuadTree().search(this)) {
-            if (obj instanceof Food && !(((Food) obj).isCarried())) {
-                takeFood((Food) obj);
+        for (RectangleObject obj : Main.getWorld().getFood().search(this)) {
+            Food food = (Food) obj;
+            if (!food.isCarried()) {
+                takeFood(food);
                 break;
             }
         }
@@ -99,66 +144,5 @@ public class Ant implements Updatable, Displayable, Locatable, RectangleObject {
     @Override
     public PVector getLocation() {
         return pos;
-    }
-
-
-    @Override
-    public String getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(String s) {
-        id = s;
-    }
-
-    @Override
-    public String getType() {
-        return type;
-    }
-
-    @Override
-    public void setType(String s) {
-        type = s;
-    }
-
-    @Override
-    public Double getX() {
-        return (double) pos.x;
-    }
-
-    @Override
-    public void setX(Double aDouble) {
-        pos.x = aDouble.floatValue();
-    }
-
-    @Override
-    public Double getY() {
-        return (double) pos.y;
-    }
-
-    @Override
-    public void setY(Double aDouble) {
-        pos.y = aDouble.floatValue();
-    }
-
-    @Override
-    public Double getH() {
-        return (double) radius;
-    }
-
-    @Override
-    public void setH(Double aDouble) {
-        radius = aDouble.floatValue();
-    }
-
-    @Override
-    public Double getW() {
-        return (double) radius;
-    }
-
-    @Override
-    public void setW(Double aDouble) {
-        radius = aDouble.floatValue();
     }
 }

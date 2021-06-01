@@ -1,11 +1,8 @@
 package antsimulation.world;
 
 import antsimulation.Main;
-import antsimulation.hive.ant.pheromone.Pheromone;
-import antsimulation.world.food.Food;
+import antsimulation.world.grid.Grid;
 import antsimulation.world.spawner.Spawner;
-import com.github.ryanp102694.QuadTree;
-import com.github.ryanp102694.geometry.RectangleObject;
 import processing.core.PVector;
 
 import java.util.Set;
@@ -15,9 +12,10 @@ public class World implements Updatable, Displayable {
 
     private static final int WIDTH = 800;
     private static final int HEIGHT = 800;
+    private static final int GRID_DOWNSCALE_FACTOR = 4;
 
+    private final Grid grid = new Grid(WIDTH / GRID_DOWNSCALE_FACTOR, HEIGHT / GRID_DOWNSCALE_FACTOR);
     private final Spawner spawner = new Spawner(this);
-    private final QuadTree quadTree = new QuadTree();
 
     private final Set<Displayable> displayables = ConcurrentHashMap.newKeySet();
     private final Set<Updatable> updatables = ConcurrentHashMap.newKeySet();
@@ -73,14 +71,10 @@ public class World implements Updatable, Displayable {
     public void addEntity(Object entity) {
         if (entity instanceof Displayable) displayables.add((Displayable) entity);
         if (entity instanceof Updatable) updatables.add((Updatable) entity);
-        if (entity instanceof Food || entity instanceof Pheromone) quadTree.addRectangleObject((RectangleObject) entity);
+        if (entity instanceof Locatable) grid.add((Locatable) entity);
     }
 
     public Spawner getSpawner() {
         return spawner;
-    }
-
-    public QuadTree getQuadTree() {
-        return quadTree;
     }
 }

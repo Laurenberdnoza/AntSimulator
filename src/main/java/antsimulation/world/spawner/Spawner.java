@@ -3,7 +3,7 @@ package antsimulation.world.spawner;
 import antsimulation.Main;
 import antsimulation.hive.Hive;
 import antsimulation.world.World;
-import antsimulation.world.food.Food;
+import antsimulation.world.objects.food.Food;
 import processing.core.PVector;
 
 public class Spawner {

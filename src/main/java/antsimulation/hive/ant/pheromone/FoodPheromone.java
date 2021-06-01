@@ -8,7 +8,7 @@ public class FoodPheromone extends Pheromone {
     public static final float LIFE_TIME = 10f;
 
     public FoodPheromone(PVector pos) {
-        super(pos.copy(), LIFE_TIME);
+        super(pos.copy(), LIFE_TIME, Type.FOOD);
     }
 
     @Override
@@ -17,7 +17,7 @@ public class FoodPheromone extends Pheromone {
 
     @Override
     public void display() {
-        Main.getApp().fill(20, 120, 30);
+        Main.getApp().fill(20, 50, 20, lifeTime / LIFE_TIME);
         Main.getApp().circle(pos.x, pos.y, radius);
     }
 }
