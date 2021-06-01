@@ -1,6 +1,8 @@
 package antsimulation.world;
 
 import antsimulation.Main;
+import antsimulation.hive.Hive;
+import antsimulation.hive.ant.Ant;
 import antsimulation.world.grid.Grid;
 import antsimulation.world.spawner.Spawner;
 import processing.core.PVector;
@@ -14,25 +16,23 @@ public class World implements Updatable, Displayable {
     private static final int HEIGHT = 800;
     private static final int GRID_DOWNSCALE_FACTOR = 4;
 
-    private final Grid grid = new Grid(WIDTH / GRID_DOWNSCALE_FACTOR, HEIGHT / GRID_DOWNSCALE_FACTOR);
+    private final Grid grid = new Grid(this, WIDTH / GRID_DOWNSCALE_FACTOR, HEIGHT / GRID_DOWNSCALE_FACTOR);
     private final Spawner spawner = new Spawner(this);
 
-    private final Set<Displayable> displayables = ConcurrentHashMap.newKeySet();
-    private final Set<Updatable> updatables = ConcurrentHashMap.newKeySet();
+    private final Set<Ant> ants = ConcurrentHashMap.newKeySet();
+    private final Set<Hive> hives = ConcurrentHashMap.newKeySet();
 
     public void update() {
-        for (Updatable updatable : updatables) {
-            updatable.update();
-            if (updatable instanceof Removable && ((Removable) updatable).isToBeRemoved()) {
-                updatables.remove(updatable);
-                if (displayables.contains((Displayable) updatable)) displayables.remove(updatable);
-            }
-        }
+        for (Ant ant : ants) ant.update();
+        grid.update();
+        System.out.println(grid.getPheromoneCount());
     }
 
     public void display() {
         displayGround();
-        for (Displayable displayable : displayables) displayable.display();
+        for (Ant ant : ants) ant.display();
+        for (Hive hive : hives) hive.display();
+        grid.display();
     }
 
     private void displayGround() {
@@ -41,10 +41,10 @@ public class World implements Updatable, Displayable {
 
     public boolean inBounds(PVector position) {
         return (
-            position.x > 0
-            && position.x < WIDTH
-            && position.y > 0
-            && position.y < HEIGHT
+            position.x >= 0
+            && position.x <= WIDTH
+            && position.y >= 0
+            && position.y <= HEIGHT
         );
     }
 
@@ -68,10 +68,14 @@ public class World implements Updatable, Displayable {
         return HEIGHT;
     }
 
+    public Grid getGrid() {
+        return grid;
+    }
+
     public void addEntity(Object entity) {
-        if (entity instanceof Displayable) displayables.add((Displayable) entity);
-        if (entity instanceof Updatable) updatables.add((Updatable) entity);
-        if (entity instanceof Locatable) grid.add((Locatable) entity);
+        if (entity instanceof Ant) ants.add((Ant) entity);
+        if (entity instanceof Hive) hives.add((Hive) entity);
+        if (entity instanceof GridEntity) grid.add((GridEntity) entity);
     }
 
     public Spawner getSpawner() {

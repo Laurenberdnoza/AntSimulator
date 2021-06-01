@@ -1,6 +1,6 @@
 package antsimulation.world;
 
-public interface Removable {
+public interface Removable extends Updatable {
 
     boolean isToBeRemoved();
 }

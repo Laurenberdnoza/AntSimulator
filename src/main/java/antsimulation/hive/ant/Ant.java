@@ -4,35 +4,27 @@ import antsimulation.Main;
 import antsimulation.hive.ant.pheromone.FoodPheromone;
 import antsimulation.hive.ant.pheromone.HomePheromone;
 import antsimulation.hive.ant.pheromone.Pheromone;
-import antsimulation.util.MockRectangleObject;
 import antsimulation.world.Displayable;
+import antsimulation.world.GridEntity;
 import antsimulation.world.Locatable;
 import antsimulation.world.Updatable;
+import antsimulation.world.grid.Node;
 import antsimulation.world.objects.food.Food;
-import com.github.ryanp102694.geometry.RectangleObject;
 import processing.core.PVector;
 
 import static java.lang.Math.max;
 
-@SuppressWarnings("SuspiciousNameCombination")
-public class Ant implements Updatable, Displayable, Locatable, RectangleObject {
+public class Ant implements Updatable, Displayable, Locatable, GridEntity {
 
     private static final float TURN_AMOUNT = 20f;
     private static final float PHEROMONE_COOLDOWN = 4f;
-    private static final float ANTENNA_LENGTH = 2f;
-    private static final float ANTENNA_ANGLE = 30f;
-    private static final float ANTENNA_PERCEPTION_WIDTH = 2f;
-    private static final float ATTRACTION_STRENGTH = 5f;
 
     private final float movementSpeed = 35f;
 
     private final PVector pos;
     private final PVector movement = PVector.random2D().setMag(movementSpeed / Main.getApp().frameRate);
-    private float radius = 2f;
+    private final float radius = 2f;
     private float timeUntilPheromoneDeposit;
-
-    private String id;
-    private String type;
 
     private Food carriedFood;
 
@@ -74,37 +66,8 @@ public class Ant implements Updatable, Displayable, Locatable, RectangleObject {
     }
 
     private void turn() {
-        if (carriedFood != null) beAttractedTo(Pheromone.Type.HOME);
-        else beAttractedTo(Pheromone.Type.FOOD);
-
         // Apply some randomness too.
         movement.rotate(Main.getApp().random(-TURN_AMOUNT / Main.getApp().frameRate, TURN_AMOUNT / Main.getApp().frameRate));
-    }
-
-    private void beAttractedTo(Pheromone.Type pheromoneType) {
-        PVector forward = new PVector(movement.x, movement.y).setMag(movement.mag() + ANTENNA_LENGTH);
-        PVector left = forward.copy().rotate(ANTENNA_ANGLE);
-        PVector right = forward.copy().rotate(-ANTENNA_ANGLE);
-
-        MockRectangleObject leftQuery = new MockRectangleObject(left.x, left.y, ANTENNA_PERCEPTION_WIDTH, ANTENNA_PERCEPTION_WIDTH);
-        MockRectangleObject rightQuery = new MockRectangleObject(right.x, right.y, ANTENNA_PERCEPTION_WIDTH, ANTENNA_PERCEPTION_WIDTH);
-
-        float leftAttraction = probeArea(leftQuery, pheromoneType);
-        float rightAttraction = probeArea(rightQuery, pheromoneType);
-
-        movement.rotate(leftAttraction - rightAttraction);
-    }
-
-    private float probeArea(MockRectangleObject queryArea, Pheromone.Type pheromoneType) {
-        float total = 0;
-
-        for (RectangleObject obj : Main.getWorld().getPheromones().search(queryArea)) {
-            if (((Pheromone) obj).getPheromoneType() == pheromoneType) {
-                total += ATTRACTION_STRENGTH;
-            }
-        }
-
-        return total;
     }
 
     private void move() {
@@ -115,13 +78,7 @@ public class Ant implements Updatable, Displayable, Locatable, RectangleObject {
     }
 
     private void checkForFood() {
-        for (RectangleObject obj : Main.getWorld().getFood().search(this)) {
-            Food food = (Food) obj;
-            if (!food.isCarried()) {
-                takeFood(food);
-                break;
-            }
-        }
+        if (!getNode().getFood().isEmpty()) takeFood(getNode().giveFood());
     }
 
     private void takeFood(Food food) {
@@ -132,6 +89,10 @@ public class Ant implements Updatable, Displayable, Locatable, RectangleObject {
 
     private void carryFood() {
         carriedFood.setPosition(pos.copy().add(movement.copy().setMag(radius)));
+    }
+
+    private Node getNode() {
+        return Main.getWorld().getGrid().getNodeAt(getLocation());
     }
 
     @Override

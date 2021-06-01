@@ -1,0 +1,20 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group 'antsimulation'
+version '1.0-SNAPSHOT'
+
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+    mavenCentral()
+}
+
+dependencies {
+    implementation name: 'processing'
+
+    implementation 'org.processing:processing-complete:3.3.7'
+}

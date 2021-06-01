@@ -2,14 +2,13 @@ package antsimulation.world.objects.food;
 
 import antsimulation.Main;
 import antsimulation.world.Displayable;
+import antsimulation.world.GridEntity;
 import antsimulation.world.Locatable;
 import processing.core.PVector;
 
-public class Food implements Displayable, Locatable {
+public class Food implements Displayable, Locatable, GridEntity {
 
-    private String id;
-    private String type = "food";
-    private float radius = 2f;
+    private final float radius = 2f;
 
     private PVector pos;
     private boolean carried = false;
