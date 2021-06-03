@@ -25,7 +25,7 @@ public class Ant implements Updatable, Displayable, Locatable {
     private static final float PHEROMONE_COOLDOWN = 4f;
 
     private final float movementSpeed = 35f;
-    private final float radius = 4f;
+    private final float radius = 6f;
     private float timeUntilPheromoneDeposit;
 
     private final PVector pos;

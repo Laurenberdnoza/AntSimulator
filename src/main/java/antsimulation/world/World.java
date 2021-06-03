@@ -10,10 +10,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class World implements Updatable, Displayable {
 
-    private static final int WIDTH = 800;
+    private static final int WIDTH = 1200;
     private static final int HEIGHT = 800;
 
-    private final Grid grid = new Grid(this, 160, 160);
+    private final Grid grid = new Grid(this, 300, 200);
     private final Spawner spawner = new Spawner(this);
 
     private final Set<Updatable> updatables = ConcurrentHashMap.newKeySet();
