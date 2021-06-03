@@ -1,8 +1,6 @@
 package antsimulation.hive.ant;
 
 import antsimulation.Main;
-import antsimulation.hive.ant.pheromone.FoodPheromone;
-import antsimulation.hive.ant.pheromone.HomePheromone;
 import antsimulation.hive.ant.pheromone.Pheromone;
 import antsimulation.world.Displayable;
 import antsimulation.world.Locatable;
@@ -42,10 +40,10 @@ public class Ant implements Updatable, Displayable, Locatable {
     public void update() {
         if (carriedFood != null) {
             carryFood();
-            attemptToDepositPheromone(new FoodPheromone(this.pos));
+            attemptToDepositPheromone(Pheromone.Type.HOME);
         } else {
             checkForFood();
-            attemptToDepositPheromone(new HomePheromone(this.pos));
+            attemptToDepositPheromone(Pheromone.Type.FOOD);
         }
         turn();
         move();
@@ -56,10 +54,9 @@ public class Ant implements Updatable, Displayable, Locatable {
         timeUntilPheromoneDeposit = max(0, timeUntilPheromoneDeposit - (1 / Main.getApp().frameRate));
     }
 
-    private void attemptToDepositPheromone(Pheromone pheromone) {
+    private void attemptToDepositPheromone(Pheromone.Type pheromoneType) {
         if (timeUntilPheromoneDeposit == 0) {
             timeUntilPheromoneDeposit = getPheromoneCooldown();
-            Main.getWorld().addEntity(pheromone);
         }
     }
 
