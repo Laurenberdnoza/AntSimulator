@@ -7,6 +7,7 @@ import processing.core.PVector;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class World implements Updatable, Displayable {
 
@@ -17,8 +18,8 @@ public class World implements Updatable, Displayable {
     private final Grid grid = new Grid(this, WIDTH / GRID_DOWNSCALE_FACTOR, HEIGHT / GRID_DOWNSCALE_FACTOR);
     private final Spawner spawner = new Spawner(this);
 
-    private final Set<Updatable> updatables = new HashSet<>();
-    private final Set<Displayable> displayables = new HashSet<>();
+    private final Set<Updatable> updatables = ConcurrentHashMap.newKeySet();
+    private final Set<Displayable> displayables = ConcurrentHashMap.newKeySet();
 
     // TODO make adding pheromone to grid node not create a new object
 
