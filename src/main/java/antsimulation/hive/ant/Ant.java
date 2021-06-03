@@ -9,6 +9,8 @@ import antsimulation.world.Locatable;
 import antsimulation.world.Updatable;
 import antsimulation.world.grid.Node;
 import antsimulation.world.objects.food.FoodChunk;
+import processing.core.PConstants;
+import processing.core.PImage;
 import processing.core.PVector;
 
 import java.util.Optional;
@@ -17,15 +19,17 @@ import static java.lang.Math.max;
 
 public class Ant implements Updatable, Displayable, Locatable {
 
+    private static final PImage ANT_TEXTURE = Main.getApp().loadImage("ant.png");
+
     private static final float TURN_AMOUNT = 20f;
     private static final float PHEROMONE_COOLDOWN = 4f;
 
     private final float movementSpeed = 35f;
+    private final float radius = 4f;
+    private float timeUntilPheromoneDeposit;
 
     private final PVector pos;
     private final PVector movement = PVector.random2D().setMag(movementSpeed / Main.getApp().frameRate);
-    private final float radius = 2f;
-    private float timeUntilPheromoneDeposit;
 
     private FoodChunk carriedFood;
 
@@ -67,7 +71,7 @@ public class Ant implements Updatable, Displayable, Locatable {
     }
 
     private void turn() {
-        // Apply some randomness too.
+        // Some randomness too.
         movement.rotate(Main.getApp().random(-TURN_AMOUNT / Main.getApp().frameRate, TURN_AMOUNT / Main.getApp().frameRate));
     }
 
@@ -99,10 +103,25 @@ public class Ant implements Updatable, Displayable, Locatable {
     @Override
     public void display() {
         if (carriedFood != null) carriedFood.display();
+        drawAnt();
+    }
+
+    private void drawAnt() {
         Main.getApp().noStroke();
-        Main.getApp().fill(5, 5, 5);
-        Main.getApp().circle(pos.x, pos.y, 2 * radius);
-        // TODO: Make ants rectangles and/or add textures
+        Main.getApp().pushMatrix();
+
+        Main.getApp().translate(pos.x, pos.y);
+        Main.getApp().rotate(movement.heading());
+
+        Main.getApp().beginShape();
+        Main.getApp().texture(ANT_TEXTURE);
+        Main.getApp().vertex(-radius, -radius, 0, 0);
+        Main.getApp().vertex(+radius, -radius, ANT_TEXTURE.width, 0);
+        Main.getApp().vertex(+radius, +radius, ANT_TEXTURE.width, ANT_TEXTURE.height);
+        Main.getApp().vertex(-radius, +radius, 0, ANT_TEXTURE.height);
+        Main.getApp().endShape(PConstants.CLOSE);
+
+        Main.getApp().popMatrix();
     }
 
     @Override

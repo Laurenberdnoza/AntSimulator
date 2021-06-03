@@ -6,6 +6,10 @@ plugins {
 group 'antsimulation'
 version '1.0-SNAPSHOT'
 
+application {
+    mainClass = 'antsimulation.Main'
+}
+
 repositories {
     flatDir {
         dirs 'libs'
@@ -15,6 +19,8 @@ repositories {
 
 dependencies {
     implementation name: 'processing'
-
-    implementation 'org.processing:processing-complete:3.3.7'
+    implementation name: 'gluegen-rt'
+    implementation name: 'gluegen-rt-natives-linux-amd64'
+    implementation name: 'jogl-all'
+    implementation name: 'jogl-all-natives-linux-amd64'
 }

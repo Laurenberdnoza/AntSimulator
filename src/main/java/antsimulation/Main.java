@@ -21,7 +21,7 @@ public class Main extends PApplet {
     }
 
     public void settings() {
-        size(world.getWidth(), world.getHeight());
+        size(world.getWidth(), world.getHeight(), processing.core.PConstants.P2D);
     }
 
     public void draw() {
