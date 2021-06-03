@@ -1,14 +1,12 @@
 package antsimulation.world;
 
 import antsimulation.Main;
-import antsimulation.hive.Hive;
-import antsimulation.hive.ant.Ant;
 import antsimulation.world.grid.Grid;
 import antsimulation.world.spawner.Spawner;
 import processing.core.PVector;
 
+import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class World implements Updatable, Displayable {
 
@@ -19,21 +17,20 @@ public class World implements Updatable, Displayable {
     private final Grid grid = new Grid(this, WIDTH / GRID_DOWNSCALE_FACTOR, HEIGHT / GRID_DOWNSCALE_FACTOR);
     private final Spawner spawner = new Spawner(this);
 
-    private final Set<Ant> ants = ConcurrentHashMap.newKeySet();
-    private final Set<Hive> hives = ConcurrentHashMap.newKeySet();
+    private final Set<Updatable> updatables = new HashSet<>();
+    private final Set<Displayable> displayables = new HashSet<>();
 
     // TODO make adding pheromone to grid node not create a new object
 
     public void update() {
-        for (Ant ant : ants) ant.update();
         grid.update();
+        for (Updatable updatable : updatables) updatable.update();
     }
 
     public void display() {
         displayGround();
-        for (Ant ant : ants) ant.display();
-        for (Hive hive : hives) hive.display();
         grid.display();
+        for (Displayable displayable : displayables) displayable.display();
     }
 
     private void displayGround() {
@@ -74,8 +71,8 @@ public class World implements Updatable, Displayable {
     }
 
     public void addEntity(Object entity) {
-        if (entity instanceof Ant) ants.add((Ant) entity);
-        if (entity instanceof Hive) hives.add((Hive) entity);
+        if (entity instanceof Updatable) updatables.add((Updatable) entity);
+        if (entity instanceof Displayable) displayables.add((Displayable) entity);
         if (entity instanceof GridEntity) grid.add((GridEntity) entity);
     }
 
