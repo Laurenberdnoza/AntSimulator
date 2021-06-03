@@ -15,6 +15,7 @@ public abstract class Pheromone implements Locatable, Displayable, Updatable, Re
         FOOD, HOME
     }
 
+    // TODO: Integrate pheromones into the Node class.
     private final Type pheromoneType;
 
     protected float radius = 8f;
