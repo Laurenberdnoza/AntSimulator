@@ -21,7 +21,7 @@ public class Ant implements Updatable, Displayable, Locatable {
 
     private static final PImage ANT_TEXTURE = Main.getApp().loadImage("ant.png");
 
-    private static final float TURN_AMOUNT = 20f;
+    private static final float TURN_AMOUNT = 10f;
     private static final float PHEROMONE_COOLDOWN = 4f;
 
     private final float movementSpeed = 35f;
