@@ -16,11 +16,13 @@ public class Grid implements Updatable, Displayable {
 
     public Grid(World parent, int width, int height) {
         this.parent = parent;
-        this.nodes = new Node[height][width]; populateGridWithNodes();
+        this.nodes = new Node[height][width];
         this.width = width;
         this.height = height;
         this.cellHeight = parent.getHeight() / (double) height;
         this.cellWidth = parent.getWidth() / (double) width;
+
+        populateGridWithNodes();
     }
 
     private void populateGridWithNodes() {

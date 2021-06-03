@@ -43,10 +43,6 @@ public class Node implements Updatable, Displayable, Locatable {
         return width;
     }
 
-    public PVector getPosition() {
-        return position;
-    }
-
     @Override
     public PVector getLocation() {
         return position;

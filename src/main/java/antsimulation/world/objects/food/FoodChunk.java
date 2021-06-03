@@ -17,7 +17,9 @@ public class FoodChunk implements Locatable, Displayable {
 
     @Override
     public void display() {
-        Main.getApp().circle(position.x, position.y, RADIUS);
+        Main.getApp().noStroke();
+        Main.getApp().fill(0, 200, 0);
+        Main.getApp().circle(position.x, position.y, 2 * RADIUS);
     }
 
     @Override

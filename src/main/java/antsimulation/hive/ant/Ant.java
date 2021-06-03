@@ -98,6 +98,7 @@ public class Ant implements Updatable, Displayable, Locatable {
 
     @Override
     public void display() {
+        if (carriedFood != null) carriedFood.display();
         Main.getApp().noStroke();
         Main.getApp().fill(5, 5, 5);
         Main.getApp().circle(pos.x, pos.y, 2 * radius);
