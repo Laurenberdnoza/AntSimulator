@@ -16,9 +16,6 @@ public class Main extends PApplet {
     public void setup() {
         app = this;
         world.getSpawner().spawnHive(100);
-        world.getSpawner().spawnFoodCluster(100);
-        world.getSpawner().spawnFoodCluster(100);
-        world.getSpawner().spawnFoodCluster(100);
     }
 
     public void settings() {

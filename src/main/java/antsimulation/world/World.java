@@ -5,7 +5,6 @@ import antsimulation.world.grid.Grid;
 import antsimulation.world.spawner.Spawner;
 import processing.core.PVector;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -23,11 +22,13 @@ public class World implements Updatable, Displayable {
 
     // TODO make adding pheromone to grid node not create a new object
 
+    @Override
     public void update() {
         grid.update();
         for (Updatable updatable : updatables) updatable.update();
     }
 
+    @Override
     public void display() {
         displayGround();
         grid.display();
@@ -74,7 +75,6 @@ public class World implements Updatable, Displayable {
     public void addEntity(Object entity) {
         if (entity instanceof Updatable) updatables.add((Updatable) entity);
         if (entity instanceof Displayable) displayables.add((Displayable) entity);
-        if (entity instanceof GridEntity) grid.add((GridEntity) entity);
     }
 
     public Spawner getSpawner() {

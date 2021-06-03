@@ -1,57 +1,54 @@
 package antsimulation.world.grid;
 
 import antsimulation.world.Displayable;
-import antsimulation.world.GridEntity;
-import antsimulation.world.Removable;
+import antsimulation.world.Locatable;
 import antsimulation.world.Updatable;
-import antsimulation.world.objects.food.Food;
+import antsimulation.world.objects.food.FoodChunk;
+import antsimulation.world.objects.food.FoodSource;
+import processing.core.PVector;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Optional;
 
-public class Node implements Updatable, Displayable {
+public class Node implements Updatable, Displayable, Locatable {
 
-    private final Set<Updatable> updatables = ConcurrentHashMap.newKeySet();
-    private final Set<Displayable> displayables = ConcurrentHashMap.newKeySet();
+    private final double width;
+    private final double height;
+    private final PVector position;
+    private final FoodSource foodSource = new FoodSource(this);
 
-    private final Set<Food> food = new HashSet<>();
-
-    public Set<Food> getFood() {
-        return food;
-    }
-
-    public void add(GridEntity entity) {
-        if (entity instanceof Food) food.add((Food) entity);
-        if (entity instanceof Displayable) displayables.add((Displayable) entity);
-        if (entity instanceof Updatable) updatables.add((Updatable) entity);
+    Node(PVector position, double width, double height) {
+        this.position = position;
+        this.width = width;
+        this.height = height;
     }
 
     @Override
     public void display() {
-        for (Displayable displayable : displayables) displayable.display();
+        foodSource.display();
     }
 
     @Override
     public void update() {
-        for (Updatable updatable : updatables) updatable.update();
-        clearUnusedObjects();
     }
 
-    private void clearUnusedObjects() {
-        for (Updatable updatable : updatables) {
-            if (updatable instanceof Removable && (((Removable) updatable).isToBeRemoved())) {
-                updatables.remove(updatable);
-                displayables.remove(updatable);
-            }
-        }
+    public Optional<FoodChunk> giveFood() {
+        return foodSource.takeChunk();
     }
 
-    public Food giveFood() {
-        if (food.isEmpty()) throw new RuntimeException("No food in this node to give!");
+    public void replenishFood() {
+        foodSource.replenish();
+    }
 
-        Food chosenFood = food.iterator().next();
-        food.remove(chosenFood);
-        return chosenFood;
+    public double getWidth() {
+        return width;
+    }
+
+    public PVector getPosition() {
+        return position;
+    }
+
+    @Override
+    public PVector getLocation() {
+        return position;
     }
 }

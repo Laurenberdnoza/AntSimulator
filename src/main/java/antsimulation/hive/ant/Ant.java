@@ -5,16 +5,17 @@ import antsimulation.hive.ant.pheromone.FoodPheromone;
 import antsimulation.hive.ant.pheromone.HomePheromone;
 import antsimulation.hive.ant.pheromone.Pheromone;
 import antsimulation.world.Displayable;
-import antsimulation.world.GridEntity;
 import antsimulation.world.Locatable;
 import antsimulation.world.Updatable;
 import antsimulation.world.grid.Node;
-import antsimulation.world.objects.food.Food;
+import antsimulation.world.objects.food.FoodChunk;
 import processing.core.PVector;
+
+import java.util.Optional;
 
 import static java.lang.Math.max;
 
-public class Ant implements Updatable, Displayable, Locatable, GridEntity {
+public class Ant implements Updatable, Displayable, Locatable {
 
     private static final float TURN_AMOUNT = 20f;
     private static final float PHEROMONE_COOLDOWN = 4f;
@@ -26,7 +27,7 @@ public class Ant implements Updatable, Displayable, Locatable, GridEntity {
     private final float radius = 2f;
     private float timeUntilPheromoneDeposit;
 
-    private Food carriedFood;
+    private FoodChunk carriedFood;
 
     public Ant(PVector startingLocation) {
         this.pos = startingLocation.copy();
@@ -78,12 +79,12 @@ public class Ant implements Updatable, Displayable, Locatable, GridEntity {
     }
 
     private void checkForFood() {
-        if (!getNode().getFood().isEmpty()) takeFood(getNode().giveFood());
+        Optional<FoodChunk> foodChunk = getNode().giveFood();
+        foodChunk.ifPresent(this::takeFood);
     }
 
-    private void takeFood(Food food) {
-        food.setCarried(true);
-        carriedFood = food;
+    private void takeFood(FoodChunk foodChunk) {
+        carriedFood = foodChunk;
         carryFood();
     }
 

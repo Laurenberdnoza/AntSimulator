@@ -1,21 +1,23 @@
-antsimulation/world/Updatable.java
- antsimulation.world.Updatable
-antsimulation/world/Locatable.java
- antsimulation.world.Locatable
-antsimulation/world/Displayable.java
- antsimulation.world.Displayable
+antsimulation/world/spawner/Spawner.java
+ antsimulation.world.spawner.Spawner
 antsimulation/world/grid/Node.java
  antsimulation.world.grid.Node
-antsimulation/world/GridEntity.java
- antsimulation.world.GridEntity
-antsimulation/world/Removable.java
- antsimulation.world.Removable
-antsimulation/hive/Hive.java
- antsimulation.hive.Hive
-antsimulation/world/World.java
- antsimulation.world.World
+antsimulation/world/Locatable.java
+ antsimulation.world.Locatable
 antsimulation/world/grid/Grid.java
  antsimulation.world.grid.Grid
+antsimulation/world/Displayable.java
+ antsimulation.world.Displayable
+antsimulation/world/Removable.java
+ antsimulation.world.Removable
+antsimulation/world/Updatable.java
+ antsimulation.world.Updatable
+antsimulation/hive/Hive.java
+ antsimulation.hive.Hive
+antsimulation/world/objects/food/FoodChunk.java
+ antsimulation.world.objects.food.FoodChunk
+antsimulation/world/World.java
+ antsimulation.world.World
 antsimulation/hive/ant/Ant.java
  antsimulation.hive.ant.Ant
 antsimulation/hive/ant/pheromone/FoodPheromone.java
@@ -23,10 +25,8 @@ antsimulation/hive/ant/pheromone/FoodPheromone.java
 antsimulation/hive/ant/pheromone/Pheromone.java
  antsimulation.hive.ant.pheromone.Pheromone
  antsimulation.hive.ant.pheromone.Pheromone$Type
-antsimulation/world/spawner/Spawner.java
- antsimulation.world.spawner.Spawner
-antsimulation/world/objects/food/Food.java
- antsimulation.world.objects.food.Food
+antsimulation/world/objects/food/FoodSource.java
+ antsimulation.world.objects.food.FoodSource
 antsimulation/Main.java
  antsimulation.Main
 antsimulation/hive/ant/pheromone/HomePheromone.java

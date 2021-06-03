@@ -1,7 +1,6 @@
 package antsimulation.world.grid;
 
 import antsimulation.world.Displayable;
-import antsimulation.world.GridEntity;
 import antsimulation.world.Updatable;
 import antsimulation.world.World;
 import processing.core.PVector;
@@ -27,14 +26,16 @@ public class Grid implements Updatable, Displayable {
     private void populateGridWithNodes() {
         for (int j = 0; j < nodes.length; j++) {
             for (int i = 0; i < nodes[0].length; i++) {
-                nodes[j][i] = new Node();
+                nodes[j][i] = new Node(
+                        new PVector((float) (i * cellWidth), (float) (j * cellHeight)), cellWidth, cellHeight
+                );
             }
         }
     }
 
     public Node getNodeAt(PVector location) {
-        final int y = Math.min((int) (location.y / cellHeight), height);
-        final int x = Math.min((int) (location.x / cellWidth), width);
+        final int y = Math.min((int) (location.y / cellHeight), height - 1);
+        final int x = Math.min((int) (location.x / cellWidth), width - 1);
         if (!parent.inBounds(new PVector(x, y))) {
             throw new RuntimeException(String.format("Queried position (%d, %d) not in world bounds!", x, y));
         }
@@ -45,18 +46,14 @@ public class Grid implements Updatable, Displayable {
     @Override
     public void display() {
         for (Node[] nodeRow : nodes)
-            for (Node node : nodeRow) {
+            for (Node node : nodeRow)
                 node.display();
-            }
     }
 
     @Override
     public void update() {
         for (Node[] nodeRow : nodes)
-            for (Node node : nodeRow) node.update();
-    }
-
-    public void add(GridEntity entity) {
-        getNodeAt(entity.getLocation()).add(entity);
+            for (Node node : nodeRow)
+                node.update();
     }
 }

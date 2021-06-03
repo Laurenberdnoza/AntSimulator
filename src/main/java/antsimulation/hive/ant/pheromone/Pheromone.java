@@ -2,7 +2,6 @@ package antsimulation.hive.ant.pheromone;
 
 import antsimulation.Main;
 import antsimulation.world.Displayable;
-import antsimulation.world.GridEntity;
 import antsimulation.world.Locatable;
 import antsimulation.world.Removable;
 import antsimulation.world.Updatable;
@@ -10,7 +9,7 @@ import processing.core.PVector;
 
 import static java.lang.Math.max;
 
-public abstract class Pheromone implements Locatable, Displayable, Updatable, Removable, GridEntity {
+public abstract class Pheromone implements Locatable, Displayable, Updatable, Removable {
 
     public enum Type {
         FOOD, HOME
