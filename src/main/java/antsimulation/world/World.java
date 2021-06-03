@@ -19,8 +19,6 @@ public class World implements Updatable, Displayable {
     private final Set<Updatable> updatables = ConcurrentHashMap.newKeySet();
     private final Set<Displayable> displayables = ConcurrentHashMap.newKeySet();
 
-    // TODO make adding pheromone to grid node not create a new object
-
     @Override
     public void update() {
         grid.update();

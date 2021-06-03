@@ -102,6 +102,7 @@ public class Ant implements Updatable, Displayable, Locatable {
         Main.getApp().noStroke();
         Main.getApp().fill(5, 5, 5);
         Main.getApp().circle(pos.x, pos.y, 2 * radius);
+        // TODO: Make ants rectangles and/or add textures
     }
 
     @Override
