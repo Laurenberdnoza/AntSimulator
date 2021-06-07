@@ -6,7 +6,7 @@ import org.mini2Dx.gdx.math.Vector2;
 class DefaultWanderingStrategy implements WanderingStrategy {
 
     private static final float DECISION_COOLDOWN = 0.5f;
-    private static final float MAX_DIRECTION_CHANGING_ANGLE = 45f;
+    private static final float MAX_DIRECTION_CHANGING_ANGLE = 60f;
 
     private final Ant ant;
     private float cooldown = DECISION_COOLDOWN;

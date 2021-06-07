@@ -13,6 +13,6 @@ class DefaultFoodCarryingStrategy implements FoodCarryingStrategy {
     @Override
     public Vector2 getDesiredDirection() {
         if (!ant.carryingFood()) throw new RuntimeException("Called carrying food strategy without ant carrying any food.");
-        return new Vector2(1, 1);
+        return new Vector2(1, 1).setToRandomDirection();
     }
 }

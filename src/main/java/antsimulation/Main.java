@@ -17,7 +17,7 @@ public class Main extends PApplet {
 
     public void setup() {
         app = this;
-        world.getSpawner().spawnHive(1000);
+        world.getSpawner().spawnHive(5000);
     }
 
     public void settings() {
@@ -27,6 +27,12 @@ public class Main extends PApplet {
     public void draw() {
         world.update();
         world.display();
+        displayFrameRate();
+    }
+
+    private void displayFrameRate() {
+        fill(255);
+        text(frameRate, 20, 20);
     }
 
     public void mouseDragged() {

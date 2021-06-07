@@ -21,11 +21,12 @@ public class Ant implements Updatable, Displayable, Locatable {
     static final float TURN_SPEED = 180f;
 
     private static final PImage ANT_TEXTURE = Main.getApp().loadImage("ant.png");
+    private static final PImage ANT_CARRYING_FOOD_TEXTURE = Main.getApp().loadImage("ant_carrying_food.png");
 
     private static final float PHEROMONE_COOLDOWN = 4f;
     private static final int PHEROMONE_SENSING_RADIUS = 3;
 
-    private final float movementSpeed = 40;
+    private final float movementSpeed = 60;
     private final float radius = 6f;
 
     private final TurningStrategy turningStrategy = new DefaultTurningStrategy(
@@ -50,7 +51,6 @@ public class Ant implements Updatable, Displayable, Locatable {
     @Override
     public void update() {
         if (carryingFood()) {
-            carryFood();
             attemptToDepositPheromone(Pheromone.Type.HOME);
         } else {
             checkForFood();
@@ -105,11 +105,6 @@ public class Ant implements Updatable, Displayable, Locatable {
 
     private void takeFood(FoodChunk foodChunk) {
         carriedFood = foodChunk;
-        carryFood();
-    }
-
-    private void carryFood() {
-        carriedFood.setPosition(position.cpy().add(currentDirection.cpy().setLength(radius)));
     }
 
     Node getNode() {
@@ -118,7 +113,6 @@ public class Ant implements Updatable, Displayable, Locatable {
 
     @Override
     public void display() {
-        if (carryingFood()) carriedFood.display();
         drawAnt();
     }
 
@@ -130,7 +124,11 @@ public class Ant implements Updatable, Displayable, Locatable {
         Main.getApp().rotate(currentDirection.angleRad());
 
         Main.getApp().beginShape();
-        Main.getApp().texture(ANT_TEXTURE);
+        if (carryingFood()) {
+            Main.getApp().texture(ANT_CARRYING_FOOD_TEXTURE);
+        } else {
+            Main.getApp().texture(ANT_TEXTURE);
+        }
         Main.getApp().vertex(-radius, -radius, 0, 0);
         Main.getApp().vertex(+radius, -radius, ANT_TEXTURE.width, 0);
         Main.getApp().vertex(+radius, +radius, ANT_TEXTURE.width, ANT_TEXTURE.height);
