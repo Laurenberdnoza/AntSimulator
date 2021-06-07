@@ -25,20 +25,20 @@ public class Ant implements Updatable, Displayable, Locatable {
 
     private final float movementSpeed = 35f;
     private final float radius = 6f;
-    private final int pheromoneSensingRadius = 3;
 
     private final WanderingStrategy wanderingStrategy = new DefaultWanderingStrategy(this);
     private final FoodCarryingStrategy defaultFoodCarryingStrategy = new DefaultFoodCarryingStrategy(this);
 
     private final PVector position;
-    private final PVector desiredDirection = PVector.random2D().setMag(movementSpeed / Main.getApp().frameRate);
+    private PVector desiredDirection = PVector.random2D().setMag(movementSpeed / Main.getApp().frameRate);
+    private PVector currentDirection = PVector.random2D().setMag(movementSpeed / Main.getApp().frameRate);
 
     private float timeUntilPheromoneDeposit;
     private FoodChunk carriedFood;
 
     public Ant(PVector startingLocation) {
         this.position = startingLocation.copy();
-        this.timeUntilPheromoneDeposit = getPheromoneCooldown();
+        this.timeUntilPheromoneDeposit = varyCooldown(PHEROMONE_COOLDOWN);
     }
 
     @Override
@@ -50,6 +50,7 @@ public class Ant implements Updatable, Displayable, Locatable {
             checkForFood();
             attemptToDepositPheromone(Pheromone.Type.FOOD);
         }
+        getDesiredDirection();
         turn();
         move();
         reduceCooldowns();
@@ -61,27 +62,36 @@ public class Ant implements Updatable, Displayable, Locatable {
 
     private void attemptToDepositPheromone(Pheromone.Type pheromoneType) {
         if (timeUntilPheromoneDeposit == 0) {
-            timeUntilPheromoneDeposit = getPheromoneCooldown();
+            timeUntilPheromoneDeposit = varyCooldown(PHEROMONE_COOLDOWN);
         }
     }
 
-    private float getPheromoneCooldown() {
-        final float varianceRangeStart = 0.5f;
-        final float varianceRangeEnd = 1.5f;
-        final float randomCoolDownFactor = Main.getApp().random(varianceRangeStart, varianceRangeEnd);
-        return randomCoolDownFactor * PHEROMONE_COOLDOWN;
+    private float varyCooldown(float initialCooldown) {
+        final float rangeStartFactor = 0.75f;
+        final float rangeEndFactor = 1.25f;
+
+        final float randomCoolDownFactor = Main.getApp().random(rangeStartFactor, rangeEndFactor);
+        return randomCoolDownFactor * initialCooldown;
     }
 
-    private void turn() {
+    private void getDesiredDirection() {
         if (!carryingFood()) desiredDirection.rotate(wanderingStrategy.getRotation());
         else desiredDirection.rotate(defaultFoodCarryingStrategy.getRotation());
     }
 
-    private void move() {
-        PVector attemptedPos = this.position.copy().add(desiredDirection);
+    private void turn() {
+        currentDirection = desiredDirection.copy();
+    }
 
-        if (Main.getWorld().inBounds(attemptedPos)) position.add(desiredDirection);
-        else position.add(desiredDirection.rotate(180));
+    private void move() {
+        PVector attemptedPos = this.position.copy().add(currentDirection);
+
+        if (Main.getWorld().inBounds(attemptedPos)) position.add(currentDirection);
+        // If obstacle in front, do a 180.
+        else {
+            position.add(currentDirection.rotate((float) Math.PI));
+            desiredDirection = currentDirection.copy();
+        }
     }
 
     private void checkForFood() {
@@ -95,7 +105,7 @@ public class Ant implements Updatable, Displayable, Locatable {
     }
 
     private void carryFood() {
-        carriedFood.setPosition(position.copy().add(desiredDirection.copy().setMag(radius)));
+        carriedFood.setPosition(position.copy().add(currentDirection.copy().setMag(radius)));
     }
 
     Node getNode() {
@@ -113,7 +123,7 @@ public class Ant implements Updatable, Displayable, Locatable {
         Main.getApp().pushMatrix();
 
         Main.getApp().translate(position.x, position.y);
-        Main.getApp().rotate(desiredDirection.heading());
+        Main.getApp().rotate(currentDirection.heading());
 
         Main.getApp().beginShape();
         Main.getApp().texture(ANT_TEXTURE);
@@ -136,6 +146,7 @@ public class Ant implements Updatable, Displayable, Locatable {
     }
 
     int getPheromoneSensingRadius() {
+        int pheromoneSensingRadius = 3;
         return pheromoneSensingRadius;
     }
 }
