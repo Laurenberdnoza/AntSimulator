@@ -30,4 +30,26 @@ class VectorUtilsTest {
         assertEquals(0, result.x, DELTA);
         assertEquals(-1, result.y, DELTA);
     }
+
+    @Test
+    void shouldCorrectlyRotateVectorsTowardsTargetVectorSimple3() {
+        PVector origin = new PVector(2, 2);
+        PVector direction = new PVector(2, 2);
+        PVector target = new PVector(0, 0);
+
+        PVector result = VectorUtils.rotateTowards(origin, direction, target, 90);
+        assertEquals(4, result.x, DELTA);
+        assertEquals(0, result.y, DELTA);
+    }
+
+    @Test
+    void shouldCorrectlyRotateVectorsTowardsTargetVectorSimple4() {
+        PVector origin = new PVector(0, 0);
+        PVector direction = new PVector(0, 1);
+        PVector target = new PVector(1, 0);
+
+        PVector result = VectorUtils.rotateTowards(origin, direction, target, 90);
+        assertEquals(1, result.x, DELTA);
+        assertEquals(0, result.y, DELTA);
+    }
 }

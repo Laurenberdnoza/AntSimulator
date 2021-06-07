@@ -2,6 +2,7 @@ package antsimulation.hive.ant;
 
 import antsimulation.Main;
 import antsimulation.hive.ant.pheromone.Pheromone;
+import antsimulation.utils.VectorUtils;
 import antsimulation.world.Displayable;
 import antsimulation.world.Locatable;
 import antsimulation.world.Updatable;
@@ -17,7 +18,7 @@ import static java.lang.Math.max;
 
 public class Ant implements Updatable, Displayable, Locatable {
 
-    static final float TURN_AMOUNT = 10f;
+    static final float TURN_AMOUNT = 100f;
 
     private static final PImage ANT_TEXTURE = Main.getApp().loadImage("ant.png");
 
@@ -34,8 +35,8 @@ public class Ant implements Updatable, Displayable, Locatable {
     );
 
     private final PVector position;
-    private PVector desiredDirection = PVector.random2D().setMag(movementSpeed / Main.getApp().frameRate);
     private PVector currentDirection = PVector.random2D().setMag(movementSpeed / Main.getApp().frameRate);
+    private PVector desiredDirection = PVector.random2D().setMag(movementSpeed / Main.getApp().frameRate);
 
     private float timeUntilPheromoneDeposit;
 
@@ -80,7 +81,12 @@ public class Ant implements Updatable, Displayable, Locatable {
     }
 
     private void turn() {
-        currentDirection = desiredDirection.copy();
+        final float turnDelta = TURN_AMOUNT / Main.getApp().frameRate;
+
+        System.out.printf("%s, %s, %s, %s%n", getLocation(), currentDirection, desiredDirection, turnDelta);
+        currentDirection = VectorUtils.rotateTowards(
+                getLocation(), currentDirection, desiredDirection, turnDelta
+        );
     }
 
     private void move() {
@@ -151,5 +157,9 @@ public class Ant implements Updatable, Displayable, Locatable {
 
     PVector getDesiredDirection() {
         return desiredDirection.copy();
+    }
+
+    public float getMovementSpeed() {
+        return movementSpeed;
     }
 }

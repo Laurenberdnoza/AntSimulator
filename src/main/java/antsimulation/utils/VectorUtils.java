@@ -20,10 +20,10 @@ public class VectorUtils {
                 Math.abs(2 * Math.PI - (directionToTarget.heading() - direction.heading())),
                 Math.abs(directionToTarget.heading() - direction.heading())
         );
-        final float actualTurn = (Math.abs(angleDiff) < Math.abs(turnAmount)) ? angleDiff : turnAmount;
+        final float actualTurn = (angleDiff < Math.abs(turnAmount)) ? angleDiff : turnAmount;
 
         return (directionToTarget.heading() > direction.heading())
-                ? direction.rotate(actualTurn)
-                : direction.rotate(-actualTurn);
+                ? direction.copy().rotate(turnAmount)
+                : direction.copy().rotate(-turnAmount);
     }
 }
