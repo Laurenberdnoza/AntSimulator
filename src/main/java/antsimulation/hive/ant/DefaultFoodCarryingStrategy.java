@@ -1,6 +1,6 @@
 package antsimulation.hive.ant;
 
-import processing.core.PVector;
+import org.mini2Dx.gdx.math.Vector2;
 
 class DefaultFoodCarryingStrategy implements FoodCarryingStrategy {
 
@@ -11,8 +11,8 @@ class DefaultFoodCarryingStrategy implements FoodCarryingStrategy {
     }
 
     @Override
-    public PVector getDesiredDirection() {
+    public Vector2 getDesiredDirection() {
         if (!ant.carryingFood()) throw new RuntimeException("Called carrying food strategy without ant carrying any food.");
-        return new PVector(1, 1);
+        return new Vector2(1, 1);
     }
 }

@@ -2,15 +2,14 @@ package antsimulation.hive.ant;
 
 import antsimulation.Main;
 import antsimulation.hive.ant.pheromone.Pheromone;
-import antsimulation.utils.VectorUtils;
 import antsimulation.world.Displayable;
 import antsimulation.world.Locatable;
 import antsimulation.world.Updatable;
 import antsimulation.world.grid.Node;
 import antsimulation.world.objects.food.FoodChunk;
+import org.mini2Dx.gdx.math.Vector2;
 import processing.core.PConstants;
 import processing.core.PImage;
-import processing.core.PVector;
 
 import java.util.Optional;
 
@@ -35,16 +34,16 @@ public class Ant implements Updatable, Displayable, Locatable {
             new DefaultWanderingStrategy(this)
     );
 
-    private final PVector position;
-    private PVector currentDirection = PVector.random2D().setMag(movementSpeed / Main.getApp().frameRate);
-    private PVector desiredDirection = PVector.random2D().setMag(movementSpeed / Main.getApp().frameRate);
+    private final Vector2 position;
+    private final Vector2 currentDirection = new Vector2().setToRandomDirection().setLength(movementSpeed / Main.getApp().frameRate);
+    private Vector2 desiredDirection = new Vector2().setToRandomDirection().setLength(movementSpeed / Main.getApp().frameRate);
 
     private float timeUntilPheromoneDeposit;
 
     private FoodChunk carriedFood;
 
-    public Ant(PVector startingLocation) {
-        this.position = startingLocation.copy();
+    public Ant(Vector2 startingLocation) {
+        this.position = startingLocation.cpy();
         this.timeUntilPheromoneDeposit = varyCooldown(PHEROMONE_COOLDOWN);
     }
 
@@ -84,20 +83,17 @@ public class Ant implements Updatable, Displayable, Locatable {
     private void turn() {
         final float turnDelta = TURN_AMOUNT / Main.getApp().frameRate;
 
-        System.out.printf("%s, %s, %s, %s%n", getLocation(), currentDirection, desiredDirection, turnDelta);
-        currentDirection = VectorUtils.rotateTowards(
-                getLocation(), currentDirection, desiredDirection, turnDelta
-        );
+        currentDirection.setAngleDeg(desiredDirection.angleDeg());
     }
 
     private void move() {
-        PVector attemptedPos = this.position.copy().add(currentDirection);
+        Vector2 attemptedPos = this.position.cpy().add(currentDirection);
 
         if (Main.getWorld().inBounds(attemptedPos)) position.add(currentDirection);
         // If obstacle in front, do a 180.
         else {
-            position.add(currentDirection.rotate((float) Math.PI));
-            desiredDirection = currentDirection.copy();
+            position.add(currentDirection.rotateDeg(180));
+            desiredDirection = currentDirection.cpy();
         }
     }
 
@@ -112,7 +108,7 @@ public class Ant implements Updatable, Displayable, Locatable {
     }
 
     private void carryFood() {
-        carriedFood.setPosition(position.copy().add(currentDirection.copy().setMag(radius)));
+        carriedFood.setPosition(position.cpy().add(currentDirection.cpy().setLength(radius)));
     }
 
     Node getNode() {
@@ -130,7 +126,7 @@ public class Ant implements Updatable, Displayable, Locatable {
         Main.getApp().pushMatrix();
 
         Main.getApp().translate(position.x, position.y);
-        Main.getApp().rotate(currentDirection.heading());
+        Main.getApp().rotate(currentDirection.angleRad());
 
         Main.getApp().beginShape();
         Main.getApp().texture(ANT_TEXTURE);
@@ -144,8 +140,8 @@ public class Ant implements Updatable, Displayable, Locatable {
     }
 
     @Override
-    public PVector getLocation() {
-        return position.copy();
+    public Vector2 getLocation() {
+        return position.cpy();
     }
 
     boolean carryingFood() {
@@ -156,8 +152,8 @@ public class Ant implements Updatable, Displayable, Locatable {
         return PHEROMONE_SENSING_RADIUS;
     }
 
-    PVector getDesiredDirection() {
-        return desiredDirection.copy();
+    Vector2 getDesiredDirection() {
+        return desiredDirection.cpy();
     }
 
     public float getMovementSpeed() {

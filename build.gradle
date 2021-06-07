@@ -27,6 +27,7 @@ dependencies {
     implementation name: 'gluegen-rt-natives-linux-amd64'
     implementation name: 'jogl-all'
     implementation name: 'jogl-all-natives-linux-amd64'
+    implementation "org.mini2Dx:gdx-math:1.9.13"
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'

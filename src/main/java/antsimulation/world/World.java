@@ -3,7 +3,7 @@ package antsimulation.world;
 import antsimulation.Main;
 import antsimulation.world.grid.Grid;
 import antsimulation.world.spawner.Spawner;
-import processing.core.PVector;
+import org.mini2Dx.gdx.math.Vector2;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -36,7 +36,7 @@ public class World implements Updatable, Displayable {
         Main.getApp().background(80, 40, 15);  // Brown.
     }
 
-    public boolean inBounds(PVector position) {
+    public boolean inBounds(Vector2 position) {
         return (
             position.x >= 0
             && position.x <= WIDTH
@@ -45,16 +45,16 @@ public class World implements Updatable, Displayable {
         );
     }
 
-    public PVector getRandomLocation() {
+    public Vector2 getRandomLocation() {
         float x = Main.getApp().random(0, WIDTH);
         float y = Main.getApp().random(0, HEIGHT);
-        return new PVector(x, y);
+        return new Vector2(x, y);
     }
 
-    public PVector getRandomLocationAwayFromEdgeBy(float distance) {
+    public Vector2 getRandomLocationAwayFromEdgeBy(float distance) {
         float x = Main.getApp().random(distance, WIDTH - distance);
         float y = Main.getApp().random(distance, HEIGHT - distance);
-        return new PVector(x, y);
+        return new Vector2(x, y);
     }
 
     public int getWidth() {

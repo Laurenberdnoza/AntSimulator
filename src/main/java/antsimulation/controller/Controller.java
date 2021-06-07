@@ -3,7 +3,7 @@ package antsimulation.controller;
 import antsimulation.Main;
 import antsimulation.world.World;
 import antsimulation.world.grid.Node;
-import processing.core.PVector;
+import org.mini2Dx.gdx.math.Vector2;
 
 public class Controller {
 
@@ -14,7 +14,7 @@ public class Controller {
     }
 
     public void handleMouseDrag() {
-        Node targetNode = world.getGrid().getNodeAt(new PVector(Main.getApp().mouseX, Main.getApp().mouseY));
+        Node targetNode = world.getGrid().getNodeAt(new Vector2(Main.getApp().mouseX, Main.getApp().mouseY));
         targetNode.replenishFood();
     }
 }

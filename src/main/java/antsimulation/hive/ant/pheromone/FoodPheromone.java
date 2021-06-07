@@ -1,14 +1,14 @@
 package antsimulation.hive.ant.pheromone;
 
 import antsimulation.Main;
-import processing.core.PVector;
+import org.mini2Dx.gdx.math.Vector2;
 
 public class FoodPheromone extends Pheromone {
 
     public static final float LIFE_TIME = 10f;
 
-    public FoodPheromone(PVector pos) {
-        super(pos.copy(), LIFE_TIME, Type.FOOD);
+    public FoodPheromone(Vector2 pos) {
+        super(pos.cpy(), LIFE_TIME, Type.FOOD);
     }
 
     @Override

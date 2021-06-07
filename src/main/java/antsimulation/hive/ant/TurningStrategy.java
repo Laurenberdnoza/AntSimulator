@@ -1,8 +1,8 @@
 package antsimulation.hive.ant;
 
-import processing.core.PVector;
+import org.mini2Dx.gdx.math.Vector2;
 
 public interface TurningStrategy {
 
-    PVector getDesiredDirection();
+    Vector2 getDesiredDirection();
 }

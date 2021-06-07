@@ -3,15 +3,15 @@ package antsimulation.world.objects.food;
 import antsimulation.Main;
 import antsimulation.world.Displayable;
 import antsimulation.world.Locatable;
-import processing.core.PVector;
+import org.mini2Dx.gdx.math.Vector2;
 
 public class FoodChunk implements Locatable, Displayable {
 
     private static final float RADIUS = 2f;
 
-    private PVector position;
+    private Vector2 position;
 
-    public void setPosition(PVector position) {
+    public void setPosition(Vector2 position) {
         this.position = position;
     }
 
@@ -23,7 +23,7 @@ public class FoodChunk implements Locatable, Displayable {
     }
 
     @Override
-    public PVector getLocation() {
+    public Vector2 getLocation() {
         return position;
     }
 }

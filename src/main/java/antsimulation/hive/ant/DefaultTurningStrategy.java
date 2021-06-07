@@ -1,6 +1,6 @@
 package antsimulation.hive.ant;
 
-import processing.core.PVector;
+import org.mini2Dx.gdx.math.Vector2;
 
 class DefaultTurningStrategy implements TurningStrategy {
 
@@ -15,7 +15,7 @@ class DefaultTurningStrategy implements TurningStrategy {
     }
 
     @Override
-    public PVector getDesiredDirection() {
+    public Vector2 getDesiredDirection() {
         if (ant.carryingFood()) return foodCarryingStrategy.getDesiredDirection();
         else return wanderingStrategy.getDesiredDirection();
     }

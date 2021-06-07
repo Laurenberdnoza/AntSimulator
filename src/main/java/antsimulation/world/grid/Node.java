@@ -5,7 +5,7 @@ import antsimulation.world.Locatable;
 import antsimulation.world.Updatable;
 import antsimulation.world.objects.food.FoodChunk;
 import antsimulation.world.objects.food.FoodSource;
-import processing.core.PVector;
+import org.mini2Dx.gdx.math.Vector2;
 
 import java.util.Optional;
 
@@ -15,7 +15,7 @@ public class Node implements Updatable, Displayable, Locatable {
     private final int yIndex;
     private final double width;
     private final double height;
-    private final PVector position;
+    private final Vector2 position;
     private final FoodSource foodSource = new FoodSource(this);
 
     Node(int xIndex, int yIndex, double width, double height) {
@@ -23,7 +23,7 @@ public class Node implements Updatable, Displayable, Locatable {
         this.yIndex = yIndex;
         this.width = width;
         this.height = height;
-        this.position = new PVector((float) (this.xIndex * width), (float) (this.yIndex * height));
+        this.position = new Vector2((float) (this.xIndex * width), (float) (this.yIndex * height));
     }
 
     @Override
@@ -48,7 +48,7 @@ public class Node implements Updatable, Displayable, Locatable {
     }
 
     @Override
-    public PVector getLocation() {
+    public Vector2 getLocation() {
         return position;
     }
 

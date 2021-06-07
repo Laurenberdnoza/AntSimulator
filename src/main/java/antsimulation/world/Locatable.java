@@ -1,8 +1,8 @@
 package antsimulation.world;
 
-import processing.core.PVector;
+import org.mini2Dx.gdx.math.Vector2;
 
 public interface Locatable {
 
-    PVector getLocation();
+    Vector2 getLocation();
 }

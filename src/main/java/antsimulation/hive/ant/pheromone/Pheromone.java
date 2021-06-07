@@ -5,7 +5,7 @@ import antsimulation.world.Displayable;
 import antsimulation.world.Locatable;
 import antsimulation.world.Removable;
 import antsimulation.world.Updatable;
-import processing.core.PVector;
+import org.mini2Dx.gdx.math.Vector2;
 
 import static java.lang.Math.max;
 
@@ -19,10 +19,10 @@ public abstract class Pheromone implements Locatable, Displayable, Updatable, Re
     private final Type pheromoneType;
 
     protected float radius = 8f;
-    protected PVector pos;
+    protected Vector2 pos;
     protected float lifeTime;
 
-    public Pheromone(PVector pos, float lifeTime, Type type) {
+    public Pheromone(Vector2 pos, float lifeTime, Type type) {
         this.pos = pos;
         this.lifeTime = lifeTime;
         this.pheromoneType = type;
@@ -46,7 +46,7 @@ public abstract class Pheromone implements Locatable, Displayable, Updatable, Re
     }
 
     @Override
-    public PVector getLocation() {
+    public Vector2 getLocation() {
         return pos;
     }
 }

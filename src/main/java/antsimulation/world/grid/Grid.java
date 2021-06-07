@@ -3,7 +3,7 @@ package antsimulation.world.grid;
 import antsimulation.world.Displayable;
 import antsimulation.world.Updatable;
 import antsimulation.world.World;
-import processing.core.PVector;
+import org.mini2Dx.gdx.math.Vector2;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,10 +37,10 @@ public class Grid implements Updatable, Displayable {
         }
     }
 
-    public Node getNodeAt(PVector location) {
+    public Node getNodeAt(Vector2 location) {
         final int y = Math.min((int) (location.y / cellHeight), height - 1);
         final int x = Math.min((int) (location.x / cellWidth), width - 1);
-        if (!parent.inBounds(new PVector(x, y))) {
+        if (!parent.inBounds(new Vector2(x, y))) {
             throw new RuntimeException(String.format("Queried position (%d, %d) not in world bounds!", x, y));
         }
 
