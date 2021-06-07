@@ -5,15 +5,25 @@ import processing.core.PVector;
 public class VectorUtils {
 
     /**
-     * Rotate a given vector towards a target vector by a certain amount.
-     * @param mutable The vector to rotate (in-place).
+     * Return a vector rotated towards a target vector by a certain amount.
+     * @param origin The origin of the direction vector.
+     * @param direction The vector to rotate.
      * @param target The vector to rotate the first vector towards.
      * @param amount The amount to rotate by (degrees).
+     * @return A new vector representing the desired transformation.
      */
-    public static void rotateTowards(PVector mutable, PVector target, float amount) {
-        double radians = Math.toRadians(amount);
-        PVector crossProduct = mutable.cross(target);
+    public static PVector rotateTowards(PVector origin, PVector direction, PVector target, float amount) {
+        final PVector directionToTarget = target.copy().sub(origin.copy());
+        final float turnAmount = (float) Math.toRadians(amount);
 
-        mutable.mult((float) Math.cos(radians)).add((mutable.cross(crossProduct.setMag(1f))).mult((float) Math.sin(radians)));
+        final float angleDiff = (float) Math.min(
+                Math.abs(2 * Math.PI - (directionToTarget.heading() - direction.heading())),
+                Math.abs(directionToTarget.heading() - direction.heading())
+        );
+        final float actualTurn = (Math.abs(angleDiff) < Math.abs(turnAmount)) ? angleDiff : turnAmount;
+
+        return (directionToTarget.heading() > direction.heading())
+                ? direction.rotate(actualTurn)
+                : direction.rotate(-actualTurn);
     }
 }
