@@ -1,9 +1,6 @@
 package antsimulation.hive.ant;
 
-import antsimulation.Main;
-import antsimulation.world.grid.Node;
-
-import java.util.List;
+import processing.core.PVector;
 
 class DefaultFoodCarryingStrategy implements FoodCarryingStrategy {
 
@@ -14,10 +11,8 @@ class DefaultFoodCarryingStrategy implements FoodCarryingStrategy {
     }
 
     @Override
-    public float getRotation() {
+    public PVector getDesiredDirection() {
         if (!ant.carryingFood()) throw new RuntimeException("Called carrying food strategy without ant carrying any food.");
-
-        List<Node> surroundingNodes = Main.getWorld().getGrid().getNodesInSquare(ant.getNode(), ant.getPheromoneSensingRadius());
-        return 0;
+        return new PVector(1, 1);
     }
 }

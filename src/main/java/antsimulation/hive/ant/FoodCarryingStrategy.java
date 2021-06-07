@@ -1,6 +1,4 @@
 package antsimulation.hive.ant;
 
-interface FoodCarryingStrategy {
-
-    float getRotation();
+interface FoodCarryingStrategy extends TurningStrategy {
 }

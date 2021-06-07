@@ -22,18 +22,23 @@ public class Ant implements Updatable, Displayable, Locatable {
     private static final PImage ANT_TEXTURE = Main.getApp().loadImage("ant.png");
 
     private static final float PHEROMONE_COOLDOWN = 4f;
+    private static final int PHEROMONE_SENSING_RADIUS = 3;
 
     private final float movementSpeed = 35f;
     private final float radius = 6f;
 
-    private final WanderingStrategy wanderingStrategy = new DefaultWanderingStrategy(this);
-    private final FoodCarryingStrategy defaultFoodCarryingStrategy = new DefaultFoodCarryingStrategy(this);
+    private final TurningStrategy turningStrategy = new DefaultTurningStrategy(
+            this,
+            new DefaultFoodCarryingStrategy(this),
+            new DefaultWanderingStrategy(this)
+    );
 
     private final PVector position;
     private PVector desiredDirection = PVector.random2D().setMag(movementSpeed / Main.getApp().frameRate);
     private PVector currentDirection = PVector.random2D().setMag(movementSpeed / Main.getApp().frameRate);
 
     private float timeUntilPheromoneDeposit;
+
     private FoodChunk carriedFood;
 
     public Ant(PVector startingLocation) {
@@ -50,7 +55,7 @@ public class Ant implements Updatable, Displayable, Locatable {
             checkForFood();
             attemptToDepositPheromone(Pheromone.Type.FOOD);
         }
-        getDesiredDirection();
+        desiredDirection = turningStrategy.getDesiredDirection();
         turn();
         move();
         reduceCooldowns();
@@ -72,11 +77,6 @@ public class Ant implements Updatable, Displayable, Locatable {
 
         final float randomCoolDownFactor = Main.getApp().random(rangeStartFactor, rangeEndFactor);
         return randomCoolDownFactor * initialCooldown;
-    }
-
-    private void getDesiredDirection() {
-        if (!carryingFood()) desiredDirection.rotate(wanderingStrategy.getRotation());
-        else desiredDirection.rotate(defaultFoodCarryingStrategy.getRotation());
     }
 
     private void turn() {
@@ -138,7 +138,7 @@ public class Ant implements Updatable, Displayable, Locatable {
 
     @Override
     public PVector getLocation() {
-        return position;
+        return position.copy();
     }
 
     boolean carryingFood() {
@@ -146,7 +146,10 @@ public class Ant implements Updatable, Displayable, Locatable {
     }
 
     int getPheromoneSensingRadius() {
-        int pheromoneSensingRadius = 3;
-        return pheromoneSensingRadius;
+        return PHEROMONE_SENSING_RADIUS;
+    }
+
+    PVector getDesiredDirection() {
+        return desiredDirection.copy();
     }
 }

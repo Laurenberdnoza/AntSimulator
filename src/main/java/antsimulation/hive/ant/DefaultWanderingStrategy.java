@@ -1,6 +1,7 @@
 package antsimulation.hive.ant;
 
 import antsimulation.Main;
+import processing.core.PVector;
 
 class DefaultWanderingStrategy implements WanderingStrategy {
 
@@ -11,7 +12,9 @@ class DefaultWanderingStrategy implements WanderingStrategy {
     }
 
     @Override
-    public float getRotation() {
-        return Main.getApp().random(-Ant.TURN_AMOUNT / Main.getApp().frameRate, Ant.TURN_AMOUNT / Main.getApp().frameRate);
+    public PVector getDesiredDirection() {
+        return ant.getDesiredDirection().rotate(
+                Main.getApp().random(-Ant.TURN_AMOUNT / Main.getApp().frameRate, Ant.TURN_AMOUNT / Main.getApp().frameRate)
+        );
     }
 }
