@@ -15,7 +15,6 @@ import java.util.Optional;
 
 import static java.lang.Math.max;
 
-// TODO: fix the util.
 public class Ant implements Updatable, Displayable, Locatable {
 
     static final float TURN_SPEED = 180f;
