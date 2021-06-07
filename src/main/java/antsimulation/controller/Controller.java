@@ -17,4 +17,16 @@ public class Controller {
         Node targetNode = world.getGrid().getNodeAt(new Vector2(Main.getApp().mouseX, Main.getApp().mouseY));
         targetNode.replenishFood();
     }
+
+    public void handleKeyPress() {
+        final char key = Main.getApp().key;
+        switch (key) {
+            case 's':
+                handlePause();
+        }
+    }
+
+    private void handlePause() {
+        Main.getLogicPool().toggleRunning();
+    }
 }

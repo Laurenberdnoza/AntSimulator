@@ -1,16 +1,18 @@
 package antsimulation;
 
 import antsimulation.controller.Controller;
-import antsimulation.logicthread.LogicThread;
+import antsimulation.logicthread.LogicPool;
 import antsimulation.world.World;
 import processing.core.PApplet;
 
 public class Main extends PApplet {
 
     private static PApplet app;
-    private static final World world = new World();
+    private static final int TICK_RATE_IN_HZ = 60;
+    private static final World WORLD = new World();
+    private static final LogicPool LOGIC_POOL = new LogicPool(WORLD, TICK_RATE_IN_HZ);
+    private static final Controller CONTROLLER = new Controller(WORLD);
 
-    private final Controller controller = new Controller(world);
 
     public static void main(String[] args) {
         PApplet.main("antsimulation.Main");
@@ -18,18 +20,16 @@ public class Main extends PApplet {
 
     public void setup() {
         app = this;
-        world.getSpawner().spawnHive(5000);
-
-        LogicThread logicThread = new LogicThread(world, 60);
-        logicThread.start();
+        WORLD.getSpawner().spawnHive(5000);
+        LOGIC_POOL.start();
     }
 
     public void settings() {
-        size(world.getWidth(), world.getHeight(), processing.core.PConstants.P2D);
+        size(WORLD.getWidth(), WORLD.getHeight(), processing.core.PConstants.P2D);
     }
 
     public void draw() {
-        world.display();
+        WORLD.display();
         displayFrameRate();
     }
 
@@ -39,7 +39,11 @@ public class Main extends PApplet {
     }
 
     public void mouseDragged() {
-       controller.handleMouseDrag();
+       CONTROLLER.handleMouseDrag();
+    }
+
+    public void keyPressed() {
+        CONTROLLER.handleKeyPress();
     }
 
     public static PApplet getApp() {
@@ -47,6 +51,10 @@ public class Main extends PApplet {
     }
 
     public static World getWorld() {
-        return world;
+        return WORLD;
+    }
+
+    public static LogicPool getLogicPool() {
+        return LOGIC_POOL;
     }
 }

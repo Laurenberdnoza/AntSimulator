@@ -9,9 +9,9 @@ public class LogicThread extends Thread {
 
     private boolean running = false;
 
-    public LogicThread(World world, int tickRateInHz) {
+    LogicThread(World world, double tickRate) {
         this.world = world;
-        this.tickRate = 1000000000.0 / tickRateInHz;
+        this.tickRate = tickRate;
     }
 
     @Override
@@ -33,11 +33,7 @@ public class LogicThread extends Thread {
         }
     }
 
-    public void freeze() {
+    void shutDown() {
         running = false;
-    }
-
-    public void thaw() {
-        running = true;
     }
 }
