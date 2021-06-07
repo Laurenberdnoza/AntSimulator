@@ -47,10 +47,10 @@ public class Ant implements Updatable, Displayable, Locatable {
         }
         turn();
         move();
-        regenerate();
+        reduceCooldowns();
     }
 
-    private void regenerate() {
+    private void reduceCooldowns() {
         timeUntilPheromoneDeposit = max(0, timeUntilPheromoneDeposit - (1 / Main.getApp().frameRate));
     }
 
