@@ -18,14 +18,14 @@ import static java.lang.Math.max;
 // TODO: fix the util.
 public class Ant implements Updatable, Displayable, Locatable {
 
-    static final float TURN_AMOUNT = 100f;
+    static final float TURN_SPEED = 180f;
 
     private static final PImage ANT_TEXTURE = Main.getApp().loadImage("ant.png");
 
     private static final float PHEROMONE_COOLDOWN = 4f;
     private static final int PHEROMONE_SENSING_RADIUS = 3;
 
-    private final float movementSpeed = 35f;
+    private final float movementSpeed = 40;
     private final float radius = 6f;
 
     private final TurningStrategy turningStrategy = new DefaultTurningStrategy(
@@ -81,9 +81,10 @@ public class Ant implements Updatable, Displayable, Locatable {
     }
 
     private void turn() {
-        final float turnDelta = TURN_AMOUNT / Main.getApp().frameRate;
+        final float turnDelta = TURN_SPEED / Main.getApp().frameRate;
+        final int modifier = (currentDirection.dot(desiredDirection) >= 0) ? 1 : -1;
 
-        currentDirection.setAngleDeg(desiredDirection.angleDeg());
+        currentDirection.rotateDeg(modifier * turnDelta);
     }
 
     private void move() {
