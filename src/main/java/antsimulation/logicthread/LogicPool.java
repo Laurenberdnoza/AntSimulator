@@ -7,15 +7,18 @@ import java.util.Set;
 
 public class LogicPool {
 
+    private final static double TIME_LAPSE_FACTOR = 4;
+
     private final double tickRate;
     private final World world;
 
     private boolean running = false;
+    private boolean fast = false;
     private Set<LogicThread> logicThreads = new HashSet<>();
 
     public LogicPool(World world, int tickRateInHz) {
         this.world = world;
-        this.tickRate = 1000000000.0 / tickRateInHz;
+        this.tickRate = 1000000000.0 / tickRateInHz;  // To nanoseconds.
     }
 
     public void start() {
@@ -39,5 +42,10 @@ public class LogicPool {
     public void toggleRunning() {
         if (running) stop();
         else start();
+    }
+
+    public void toggleTickRate() {
+         for (LogicThread logicThread : logicThreads) logicThread.setTickRate((fast) ? tickRate : (tickRate / TIME_LAPSE_FACTOR));
+         fast = !fast;
     }
 }

@@ -4,10 +4,10 @@ import antsimulation.world.World;
 
 public class LogicThread extends Thread {
 
-    private final double tickRate;
     private final World world;
 
     private boolean running = false;
+    private double tickRate;
 
     LogicThread(World world, double tickRate) {
         this.world = world;
@@ -35,5 +35,9 @@ public class LogicThread extends Thread {
 
     void shutDown() {
         running = false;
+    }
+
+    void setTickRate(double tickRate) {
+        this.tickRate = tickRate;
     }
 }
