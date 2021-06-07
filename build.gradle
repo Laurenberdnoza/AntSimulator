@@ -4,10 +4,10 @@ plugins {
 }
 
 group 'antsimulation'
-version '1.0-SNAPSHOT'
+archivesBaseName = 'AntSimulator'
 
 application {
-    mainClass = 'antsimulation.Main'
+    mainClassName = 'antsimulation.Main'
 }
 
 repositories {
@@ -17,10 +17,6 @@ repositories {
     mavenCentral()
 }
 
-test {
-    useJUnitPlatform()
-}
-
 dependencies {
     implementation name: 'processing'
     implementation name: 'gluegen-rt'
@@ -28,7 +24,14 @@ dependencies {
     implementation name: 'jogl-all'
     implementation name: 'jogl-all-natives-linux-amd64'
     implementation "org.mini2Dx:gdx-math:1.9.13"
+}
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+jar {
+    manifest {
+        attributes "Main-Class": "$mainClassName"
+    }
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
