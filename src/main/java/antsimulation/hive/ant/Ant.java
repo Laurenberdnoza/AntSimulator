@@ -25,7 +25,7 @@ public class Ant implements Updatable, Displayable, Locatable {
 
     private final float movementSpeed = 35f;
     private final float radius = 6f;
-    private float timeUntilPheromoneDeposit;
+    private final int pheromoneSensingRadius = 3;
 
     private final WanderingStrategy wanderingStrategy = new DefaultWanderingStrategy(this);
     private final FoodCarryingStrategy defaultFoodCarryingStrategy = new DefaultFoodCarryingStrategy(this);
@@ -33,6 +33,7 @@ public class Ant implements Updatable, Displayable, Locatable {
     private final PVector position;
     private final PVector desiredDirection = PVector.random2D().setMag(movementSpeed / Main.getApp().frameRate);
 
+    private float timeUntilPheromoneDeposit;
     private FoodChunk carriedFood;
 
     public Ant(PVector startingLocation) {
@@ -132,5 +133,9 @@ public class Ant implements Updatable, Displayable, Locatable {
 
     boolean carryingFood() {
         return (carriedFood != null);
+    }
+
+    int getPheromoneSensingRadius() {
+        return pheromoneSensingRadius;
     }
 }
