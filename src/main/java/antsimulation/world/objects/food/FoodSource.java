@@ -9,7 +9,7 @@ import java.util.Optional;
 public class FoodSource implements Displayable {
 
    private static final int STARTING_CHUNKS = 0;
-   private static final int MAX_CHUNKS = 10;
+   private static final int MAX_CHUNKS = 8;
 
    private final Node parent;
 

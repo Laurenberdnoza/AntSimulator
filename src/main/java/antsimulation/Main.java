@@ -17,7 +17,7 @@ public class Main extends PApplet {
 
     public void setup() {
         app = this;
-        world.getSpawner().spawnHive(100);
+        world.getSpawner().spawnHive(1000);
     }
 
     public void settings() {
