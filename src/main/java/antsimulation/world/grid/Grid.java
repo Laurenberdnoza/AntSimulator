@@ -5,6 +5,10 @@ import antsimulation.world.Updatable;
 import antsimulation.world.World;
 import processing.core.PVector;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class Grid implements Updatable, Displayable {
 
     private final World parent;
@@ -28,9 +32,7 @@ public class Grid implements Updatable, Displayable {
     private void populateGridWithNodes() {
         for (int j = 0; j < nodes.length; j++) {
             for (int i = 0; i < nodes[0].length; i++) {
-                nodes[j][i] = new Node(
-                        new PVector((float) (i * cellWidth), (float) (j * cellHeight)), cellWidth, cellHeight
-                );
+                nodes[j][i] = new Node(i, j, cellWidth, cellHeight);
             }
         }
     }
@@ -43,6 +45,37 @@ public class Grid implements Updatable, Displayable {
         }
 
         return nodes[y][x];
+    }
+
+    /**
+     * Return nodes (incl. center) around center in a rectangle with given
+     * width, ordered by row, starting from top-left.
+     * @param center The node around which to query.
+     * @param width The width of the queried square.
+     * @return A list of nodes around the given center node.
+     */
+    public List<Node> getNodesInSquare(Node center, int width) {
+        if (width <= 0) throw new IllegalArgumentException("That would not return anything.");
+        if (width % 2 == 0) throw new IllegalArgumentException("Only odd widths make sense (or else square is uneven).");
+        if (width == 1) return Collections.singletonList(center);
+
+        final int offsetToStart = ((width - 1) / 2);
+        List<Node> outputNodes = new ArrayList<>();
+
+        for (int j = center.getYIndex() - offsetToStart; j < width; j++) {
+            for (int i = center.getXIndex() - offsetToStart; i < width; i++) {
+                if (indicesInGrid(i, j)) outputNodes.add(nodes[j][i]);
+            }
+        }
+
+        return outputNodes;
+    }
+
+    private boolean indicesInGrid(int x, int y) {
+        return (
+                x >= 0 && x < nodes[0].length
+                && y >= 0 && y < nodes.length
+        );
     }
 
     @Override

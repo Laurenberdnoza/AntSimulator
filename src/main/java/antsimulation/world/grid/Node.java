@@ -11,15 +11,19 @@ import java.util.Optional;
 
 public class Node implements Updatable, Displayable, Locatable {
 
+    private final int xIndex;
+    private final int yIndex;
     private final double width;
     private final double height;
     private final PVector position;
     private final FoodSource foodSource = new FoodSource(this);
 
-    Node(PVector position, double width, double height) {
-        this.position = position;
+    Node(int xIndex, int yIndex, double width, double height) {
+        this.xIndex = xIndex;
+        this.yIndex = yIndex;
         this.width = width;
         this.height = height;
+        this.position = new PVector((float) (this.xIndex * width), (float) (this.yIndex * height));
     }
 
     @Override
@@ -46,5 +50,13 @@ public class Node implements Updatable, Displayable, Locatable {
     @Override
     public PVector getLocation() {
         return position;
+    }
+
+    public int getYIndex() {
+        return yIndex;
+    }
+
+    public int getXIndex() {
+        return xIndex;
     }
 }
