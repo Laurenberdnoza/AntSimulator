@@ -1,7 +1,5 @@
 package antsimulation.hive.ant;
 
-import antsimulation.Main;
-
 class DefaultFoodCarryingStrategy implements FoodCarryingStrategy {
 
     private final Ant ant;
