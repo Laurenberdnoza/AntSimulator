@@ -59,11 +59,11 @@ public class Grid implements Updatable, Displayable {
         if (width % 2 == 0) throw new IllegalArgumentException("Only odd widths make sense (or else square is uneven).");
         if (width == 1) return Collections.singletonList(center);
 
-        final int offsetToStart = ((width - 1) / 2);
+        final int offsetToEdge = width / 2;
         List<Node> outputNodes = new ArrayList<>();
 
-        for (int j = center.getYIndex() - offsetToStart; j < width; j++) {
-            for (int i = center.getXIndex() - offsetToStart; i < width; i++) {
+        for (int j = center.getYIndex() - offsetToEdge; j <= center.getYIndex() + offsetToEdge; j++) {
+            for (int i = center.getXIndex() - offsetToEdge; i <= center.getXIndex() + offsetToEdge; i++) {
                 if (indicesInGrid(i, j)) outputNodes.add(nodes[j][i]);
             }
         }
