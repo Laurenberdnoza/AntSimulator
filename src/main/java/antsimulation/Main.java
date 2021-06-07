@@ -1,6 +1,7 @@
 package antsimulation;
 
 import antsimulation.controller.Controller;
+import antsimulation.logicthread.LogicThread;
 import antsimulation.world.World;
 import processing.core.PApplet;
 
@@ -18,6 +19,9 @@ public class Main extends PApplet {
     public void setup() {
         app = this;
         world.getSpawner().spawnHive(5000);
+
+        LogicThread logicThread = new LogicThread(world, 60);
+        logicThread.start();
     }
 
     public void settings() {
@@ -25,7 +29,6 @@ public class Main extends PApplet {
     }
 
     public void draw() {
-        world.update();
         world.display();
         displayFrameRate();
     }
