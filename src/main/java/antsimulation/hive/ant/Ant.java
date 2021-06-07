@@ -17,28 +17,32 @@ import static java.lang.Math.max;
 
 public class Ant implements Updatable, Displayable, Locatable {
 
+    static final float TURN_AMOUNT = 10f;
+
     private static final PImage ANT_TEXTURE = Main.getApp().loadImage("ant.png");
 
-    private static final float TURN_AMOUNT = 10f;
     private static final float PHEROMONE_COOLDOWN = 4f;
 
     private final float movementSpeed = 35f;
     private final float radius = 6f;
     private float timeUntilPheromoneDeposit;
 
-    private final PVector pos;
-    private final PVector movement = PVector.random2D().setMag(movementSpeed / Main.getApp().frameRate);
+    private final WanderingStrategy wanderingStrategy = new DefaultWanderingStrategy(this);
+    private final FoodCarryingStrategy defaultFoodCarryingStrategy = new DefaultFoodCarryingStrategy(this);
+
+    private final PVector position;
+    private final PVector desiredDirection = PVector.random2D().setMag(movementSpeed / Main.getApp().frameRate);
 
     private FoodChunk carriedFood;
 
     public Ant(PVector startingLocation) {
-        this.pos = startingLocation.copy();
+        this.position = startingLocation.copy();
         this.timeUntilPheromoneDeposit = getPheromoneCooldown();
     }
 
     @Override
     public void update() {
-        if (carriedFood != null) {
+        if (carryingFood()) {
             carryFood();
             attemptToDepositPheromone(Pheromone.Type.HOME);
         } else {
@@ -68,15 +72,15 @@ public class Ant implements Updatable, Displayable, Locatable {
     }
 
     private void turn() {
-        // Some randomness too.
-        movement.rotate(Main.getApp().random(-TURN_AMOUNT / Main.getApp().frameRate, TURN_AMOUNT / Main.getApp().frameRate));
+        if (!carryingFood()) desiredDirection.rotate(wanderingStrategy.getRotation());
+        else desiredDirection.rotate(defaultFoodCarryingStrategy.getRotation());
     }
 
     private void move() {
-        PVector attemptedPos = this.pos.copy().add(movement);
+        PVector attemptedPos = this.position.copy().add(desiredDirection);
 
-        if (Main.getWorld().inBounds(attemptedPos)) pos.add(movement);
-        else pos.add(movement.rotate(180));
+        if (Main.getWorld().inBounds(attemptedPos)) position.add(desiredDirection);
+        else position.add(desiredDirection.rotate(180));
     }
 
     private void checkForFood() {
@@ -90,16 +94,16 @@ public class Ant implements Updatable, Displayable, Locatable {
     }
 
     private void carryFood() {
-        carriedFood.setPosition(pos.copy().add(movement.copy().setMag(radius)));
+        carriedFood.setPosition(position.copy().add(desiredDirection.copy().setMag(radius)));
     }
 
-    private Node getNode() {
+    Node getNode() {
         return Main.getWorld().getGrid().getNodeAt(getLocation());
     }
 
     @Override
     public void display() {
-        if (carriedFood != null) carriedFood.display();
+        if (carryingFood()) carriedFood.display();
         drawAnt();
     }
 
@@ -107,8 +111,8 @@ public class Ant implements Updatable, Displayable, Locatable {
         Main.getApp().noStroke();
         Main.getApp().pushMatrix();
 
-        Main.getApp().translate(pos.x, pos.y);
-        Main.getApp().rotate(movement.heading());
+        Main.getApp().translate(position.x, position.y);
+        Main.getApp().rotate(desiredDirection.heading());
 
         Main.getApp().beginShape();
         Main.getApp().texture(ANT_TEXTURE);
@@ -123,6 +127,10 @@ public class Ant implements Updatable, Displayable, Locatable {
 
     @Override
     public PVector getLocation() {
-        return pos;
+        return position;
+    }
+
+    boolean carryingFood() {
+        return (carriedFood != null);
     }
 }
