@@ -13,7 +13,7 @@ public class World implements Updatable, Displayable {
     private static final int WIDTH = 1920;
     private static final int HEIGHT = 1080;
 
-    private final Grid grid = new Grid(this, 180, 90);
+    private final Grid grid = new Grid(this, 192, 108);
     private final Spawner spawner = new Spawner(this);
 
     private final Set<Updatable> updatables = ConcurrentHashMap.newKeySet();

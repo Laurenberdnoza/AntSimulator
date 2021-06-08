@@ -1,6 +1,7 @@
 package antsimulation;
 
 import antsimulation.controller.Controller;
+import antsimulation.settingshandler.SettingsHandler;
 import antsimulation.threading.ThreadPool;
 import antsimulation.world.World;
 import processing.core.PApplet;
@@ -14,6 +15,8 @@ public class Main extends PApplet {
     private static final World WORLD = new World();
     private static final ThreadPool LOGIC_POOL = new ThreadPool(WORLD, LOGIC_TICK_RATE_IN_HZ);
     private static final Controller CONTROLLER = new Controller(WORLD);
+
+    private static final SettingsHandler SETTINGS_HANDLER = new SettingsHandler();
 
 
     public static void main(String[] args) {
@@ -60,5 +63,9 @@ public class Main extends PApplet {
 
     public static ThreadPool getLogicPool() {
         return LOGIC_POOL;
+    }
+
+    public static SettingsHandler getSettingsHandler() {
+        return SETTINGS_HANDLER;
     }
 }

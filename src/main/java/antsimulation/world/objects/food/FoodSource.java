@@ -40,7 +40,7 @@ public class FoodSource implements Displayable {
       if (!isEmpty()) {
          final float x = parent.getLocation().x;
          final float y = parent.getLocation().y;
-         Main.getApp().fill(0, 220, 0);
+         Main.getApp().fill(20, 140, 5);
          Main.getApp().circle(x, y, (float) parent.getWidth());
       }
    }

@@ -1,5 +1,6 @@
 package antsimulation.hive.ant.pheromone;
 
+import antsimulation.Main;
 import antsimulation.world.Displayable;
 import antsimulation.world.Locatable;
 import antsimulation.world.Removable;
@@ -41,7 +42,7 @@ public abstract class Pheromone implements Locatable, Displayable, Updatable, Re
 
     @Override
     public void display() {
-        if (lifeTime > 0) onDisplay();
+        if (lifeTime > 0 && Main.getSettingsHandler().isPheromonesVisible()) onDisplay();
     }
 
     protected abstract void onUpdate();

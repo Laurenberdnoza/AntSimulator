@@ -19,6 +19,7 @@ public class Node implements Updatable, Displayable, Locatable {
     private final int xIndex;
     private final int yIndex;
     private final double width;
+
     private final double height;
     private final Vector2 position;
     private final FoodSource foodSource = new FoodSource(this);
@@ -76,5 +77,9 @@ public class Node implements Updatable, Displayable, Locatable {
 
     public void depositPheromone(Pheromone.Type pheromoneType) {
         pheromones.get(pheromoneType).refresh();
+    }
+
+    public double getHeight() {
+        return height;
     }
 }

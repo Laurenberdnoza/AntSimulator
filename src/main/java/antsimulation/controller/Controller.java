@@ -28,6 +28,9 @@ public class Controller {
             case 's':
                 handlePause();
                 break;
+            case 'p':
+                handlePheromoneToggle();
+                break;
             default:
                 break;
         }
@@ -39,5 +42,9 @@ public class Controller {
 
     private void handleTimeScale() {
         Main.getLogicPool().toggleTickRate();
+    }
+
+    private void handlePheromoneToggle() {
+        Main.getSettingsHandler().togglePheromoneVisibility();
     }
 }
