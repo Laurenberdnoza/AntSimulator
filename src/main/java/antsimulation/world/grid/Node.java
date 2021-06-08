@@ -22,7 +22,7 @@ public class Node implements Updatable, Displayable, Locatable {
 
     private final double height;
     private final Vector2 position;
-    private final FoodSource foodSource = new FoodSource(this);
+    private final FoodSource foodSource;
     private final Map<Pheromone.Type, Pheromone> pheromones = new HashMap<>();
 
     Node(int xIndex, int yIndex, double width, double height) {
@@ -30,7 +30,8 @@ public class Node implements Updatable, Displayable, Locatable {
         this.yIndex = yIndex;
         this.width = width;
         this.height = height;
-        this.position = new Vector2((float) (this.xIndex * width), (float) (this.yIndex * height));
+        this.position = new Vector2((float) ((this.xIndex + 0.5) * width), (float) ((this.yIndex + 0.5f) * height));
+        this.foodSource = new FoodSource(this);
         pheromones.put(Pheromone.Type.HOME, new HomePheromone(this));
         pheromones.put(Pheromone.Type.FOOD, new FoodPheromone(this));
     }

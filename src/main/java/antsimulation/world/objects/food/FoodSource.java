@@ -3,6 +3,7 @@ package antsimulation.world.objects.food;
 import antsimulation.Main;
 import antsimulation.world.Displayable;
 import antsimulation.world.grid.Node;
+import org.mini2Dx.gdx.math.Vector2;
 
 import java.util.Optional;
 
@@ -11,12 +12,14 @@ public class FoodSource implements Displayable {
    private static final int STARTING_CHUNKS = 0;
    private static final int MAX_CHUNKS = 8;
 
-   private final Node parent;
+   private final Vector2 position;
+   private final float radius;
 
    private int remainingChunks = STARTING_CHUNKS;
 
    public FoodSource(Node parent) {
-      this.parent = parent;
+      this.radius = (float) parent.getWidth();
+      this.position = new Vector2(parent.getLocation().x, parent.getLocation().y);
    }
 
    public Optional<FoodChunk> takeChunk() {
@@ -38,10 +41,8 @@ public class FoodSource implements Displayable {
    @Override
    public void display() {
       if (!isEmpty()) {
-         final float x = parent.getLocation().x;
-         final float y = parent.getLocation().y;
          Main.getApp().fill(30, 120, 5);
-         Main.getApp().circle(x, y, (float) parent.getWidth());
+         Main.getApp().square(position.x, position.y, radius);
       }
    }
 }
