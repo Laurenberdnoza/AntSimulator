@@ -7,10 +7,12 @@ import processing.core.PApplet;
 
 public class Main extends PApplet {
 
+    private static final int LOGIC_TICK_RATE_IN_HZ = 60;
+    private static final int FRAME_RATE = 60;
+
     private static PApplet app;
-    private static final int TICK_RATE_IN_HZ = 60;
     private static final World WORLD = new World();
-    private static final ThreadPool LOGIC_POOL = new ThreadPool(WORLD, TICK_RATE_IN_HZ);
+    private static final ThreadPool LOGIC_POOL = new ThreadPool(WORLD, LOGIC_TICK_RATE_IN_HZ);
     private static final Controller CONTROLLER = new Controller(WORLD);
 
 
@@ -20,7 +22,9 @@ public class Main extends PApplet {
 
     public void setup() {
         app = this;
-        WORLD.getSpawner().spawnHive(5000);
+        frameRate(FRAME_RATE);
+
+        WORLD.getSpawner().spawnHive(500);
         LOGIC_POOL.start();
     }
 
