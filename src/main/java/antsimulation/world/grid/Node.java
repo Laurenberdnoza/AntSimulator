@@ -1,5 +1,8 @@
 package antsimulation.world.grid;
 
+import antsimulation.hive.ant.pheromone.FoodPheromone;
+import antsimulation.hive.ant.pheromone.HomePheromone;
+import antsimulation.hive.ant.pheromone.Pheromone;
 import antsimulation.world.Displayable;
 import antsimulation.world.Locatable;
 import antsimulation.world.Updatable;
@@ -7,6 +10,8 @@ import antsimulation.world.objects.food.FoodChunk;
 import antsimulation.world.objects.food.FoodSource;
 import org.mini2Dx.gdx.math.Vector2;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 public class Node implements Updatable, Displayable, Locatable {
@@ -17,6 +22,7 @@ public class Node implements Updatable, Displayable, Locatable {
     private final double height;
     private final Vector2 position;
     private final FoodSource foodSource = new FoodSource(this);
+    private final Map<Pheromone.Type, Pheromone> pheromones = new HashMap<>();
 
     Node(int xIndex, int yIndex, double width, double height) {
         this.xIndex = xIndex;
@@ -24,15 +30,19 @@ public class Node implements Updatable, Displayable, Locatable {
         this.width = width;
         this.height = height;
         this.position = new Vector2((float) (this.xIndex * width), (float) (this.yIndex * height));
+        pheromones.put(Pheromone.Type.HOME, new HomePheromone(this));
+        pheromones.put(Pheromone.Type.FOOD, new FoodPheromone(this));
+    }
+
+    @Override
+    public void update() {
+        for (Pheromone pheromone : pheromones.values()) pheromone.update();
     }
 
     @Override
     public void display() {
         foodSource.display();
-    }
-
-    @Override
-    public void update() {
+        for (Pheromone pheromone : pheromones.values()) pheromone.display();
     }
 
     public Optional<FoodChunk> giveFood() {
@@ -49,7 +59,7 @@ public class Node implements Updatable, Displayable, Locatable {
 
     @Override
     public Vector2 getLocation() {
-        return position;
+        return position.cpy();
     }
 
     public int getYIndex() {
@@ -58,5 +68,13 @@ public class Node implements Updatable, Displayable, Locatable {
 
     public int getXIndex() {
         return xIndex;
+    }
+
+    public float getPheromoneStrength(Pheromone.Type type) {
+        return pheromones.get(type).getStrength();
+    }
+
+    public void depositPheromone(Pheromone.Type pheromoneType) {
+        pheromones.get(pheromoneType).refresh();
     }
 }

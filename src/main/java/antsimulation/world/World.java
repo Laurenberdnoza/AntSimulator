@@ -13,7 +13,7 @@ public class World implements Updatable, Displayable {
     private static final int WIDTH = 1920;
     private static final int HEIGHT = 1080;
 
-    private final Grid grid = new Grid(this, 320, 180);
+    private final Grid grid = new Grid(this, 180, 90);
     private final Spawner spawner = new Spawner(this);
 
     private final Set<Updatable> updatables = ConcurrentHashMap.newKeySet();
@@ -33,7 +33,7 @@ public class World implements Updatable, Displayable {
     }
 
     private void displayGround() {
-        Main.getApp().background(80, 40, 15);  // Brown.
+        Main.getApp().background(80, 40, 0);
     }
 
     public boolean inBounds(Vector2 position) {

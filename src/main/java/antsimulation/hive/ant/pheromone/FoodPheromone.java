@@ -1,23 +1,22 @@
 package antsimulation.hive.ant.pheromone;
 
 import antsimulation.Main;
-import org.mini2Dx.gdx.math.Vector2;
+import antsimulation.world.grid.Node;
 
 public class FoodPheromone extends Pheromone {
 
-    public static final float LIFE_TIME = 10f;
+    public static final float MAX_LIFE_TIME = 10f;
 
-    public FoodPheromone(Vector2 pos) {
-        super(pos.cpy(), LIFE_TIME, Type.FOOD);
+    public FoodPheromone(Node parent) {
+        super(parent, MAX_LIFE_TIME, Type.FOOD);
     }
 
     @Override
     protected void onUpdate() {
     }
 
-    @Override
-    public void display() {
-        Main.getApp().fill(20, 50, 20, lifeTime / LIFE_TIME);
-        Main.getApp().circle(pos.x, pos.y, radius);
+    protected void onDisplay() {
+        Main.getApp().fill(0, 240, 0, 255 * (lifeTime / MAX_LIFE_TIME));
+        Main.getApp().circle(parent.getLocation().x, parent.getLocation().y, radius);
     }
 }

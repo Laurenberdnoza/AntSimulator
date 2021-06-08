@@ -1,20 +1,19 @@
 package antsimulation.hive.ant.pheromone;
 
 import antsimulation.Main;
-import org.mini2Dx.gdx.math.Vector2;
+import antsimulation.world.grid.Node;
 
 public class HomePheromone extends Pheromone {
 
-    private static final float LIFE_TIME = 5f;
+    private static final float MAX_LIFE_TIME = 5f;
 
-    public HomePheromone(Vector2 pos) {
-        super(pos.cpy(), LIFE_TIME, Type.HOME);
+    public HomePheromone(Node parent) {
+        super(parent, MAX_LIFE_TIME, Type.HOME);
     }
 
-    @Override
-    public void display() {
-        Main.getApp().fill(40, 0, 120, 255 * lifeTime / LIFE_TIME);
-        Main.getApp().circle(pos.x, pos.y, radius);
+    protected void onDisplay() {
+        Main.getApp().fill(40, 0, 120, 255 * (lifeTime / MAX_LIFE_TIME));
+        Main.getApp().circle(parent.getLocation().x, parent.getLocation().y, radius);
     }
 
     @Override

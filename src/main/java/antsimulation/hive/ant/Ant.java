@@ -22,8 +22,8 @@ public class Ant implements Updatable, Displayable, Locatable {
     private static final PImage ANT_TEXTURE = Main.getApp().loadImage("ant.png");
     private static final PImage ANT_CARRYING_FOOD_TEXTURE = Main.getApp().loadImage("ant_carrying_food.png");
 
-    private static final float PHEROMONE_COOLDOWN = 4f;
-    private static final int PHEROMONE_SENSING_RADIUS = 3;
+    private static final float PHEROMONE_COOLDOWN = 3f;
+    private static final int PHEROMONE_SENSING_RADIUS = 7;
 
     private final float movementSpeed = 60;
     private final float radius = 6f;
@@ -50,10 +50,10 @@ public class Ant implements Updatable, Displayable, Locatable {
     @Override
     public void update() {
         if (carryingFood()) {
-            attemptToDepositPheromone(Pheromone.Type.HOME);
+            attemptToDepositPheromone(Pheromone.Type.FOOD);
         } else {
             checkForFood();
-            attemptToDepositPheromone(Pheromone.Type.FOOD);
+            attemptToDepositPheromone(Pheromone.Type.HOME);
         }
         desiredDirection = turningStrategy.getDesiredDirection();
         turn();
@@ -67,6 +67,7 @@ public class Ant implements Updatable, Displayable, Locatable {
 
     private void attemptToDepositPheromone(Pheromone.Type pheromoneType) {
         if (timeUntilPheromoneDeposit == 0) {
+            getNode().depositPheromone(pheromoneType);
             timeUntilPheromoneDeposit = varyCooldown(PHEROMONE_COOLDOWN);
         }
     }

@@ -5,6 +5,7 @@ import antsimulation.world.Displayable;
 import antsimulation.world.Locatable;
 import antsimulation.world.Removable;
 import antsimulation.world.Updatable;
+import antsimulation.world.grid.Node;
 import org.mini2Dx.gdx.math.Vector2;
 
 import static java.lang.Math.max;
@@ -15,16 +16,16 @@ public abstract class Pheromone implements Locatable, Displayable, Updatable, Re
         FOOD, HOME
     }
 
-    // TODO: Integrate pheromones into the Node class.
     private final Type pheromoneType;
 
+    protected final Node parent;
+    protected float maxLifeTime;
     protected float radius = 8f;
-    protected Vector2 pos;
-    protected float lifeTime;
+    protected float lifeTime = 0;
 
-    public Pheromone(Vector2 pos, float lifeTime, Type type) {
-        this.pos = pos;
-        this.lifeTime = lifeTime;
+    public Pheromone(Node parent, float maxLifeTime, Type type) {
+        this.parent = parent;
+        this.maxLifeTime = maxLifeTime;
         this.pheromoneType = type;
     }
 
@@ -39,7 +40,14 @@ public abstract class Pheromone implements Locatable, Displayable, Updatable, Re
         onUpdate();
     }
 
+    @Override
+    public void display() {
+        if (lifeTime > 0) onDisplay();
+    }
+
     protected abstract void onUpdate();
+
+    protected abstract void onDisplay();
 
     public Type getPheromoneType() {
         return pheromoneType;
@@ -47,6 +55,14 @@ public abstract class Pheromone implements Locatable, Displayable, Updatable, Re
 
     @Override
     public Vector2 getLocation() {
-        return pos;
+        return parent.getLocation();
+    }
+
+    public float getStrength() {
+        return lifeTime;
+    }
+
+    public void refresh() {
+        lifeTime = maxLifeTime;
     }
 }
