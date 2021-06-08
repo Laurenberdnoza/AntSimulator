@@ -33,7 +33,7 @@ public class World implements Updatable, Displayable {
     }
 
     private void displayGround() {
-        Main.getApp().background(80, 40, 0);
+        Main.getApp().background(80, 80, 80);
     }
 
     public boolean inBounds(Vector2 position) {

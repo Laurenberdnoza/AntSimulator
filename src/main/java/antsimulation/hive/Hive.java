@@ -29,6 +29,8 @@ public class Hive implements Displayable {
 
     @Override
     public void display() {
+        Main.getApp().strokeWeight(2);
+        Main.getApp().stroke(35, 25, 3);
         Main.getApp().fill(40, 30, 5);
         Main.getApp().circle(location.x, location.y, 2 * RADIUS);
     }
