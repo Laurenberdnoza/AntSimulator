@@ -34,7 +34,7 @@ public class FoodSource implements Displayable {
       remainingChunks = MAX_CHUNKS;
    }
 
-   private boolean isEmpty() {
+   public boolean isEmpty() {
       return (remainingChunks == 0);
    }
 

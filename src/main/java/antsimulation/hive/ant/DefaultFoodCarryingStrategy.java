@@ -1,47 +1,37 @@
 package antsimulation.hive.ant;
 
-import antsimulation.Main;
 import antsimulation.hive.ant.pheromone.Pheromone;
 import antsimulation.world.grid.Node;
 import org.mini2Dx.gdx.math.Vector2;
 
-import java.util.Collections;
-import java.util.List;
+class DefaultFoodCarryingStrategy extends PheromoneSeekingStrategy implements FoodCarryingStrategy {
 
-class DefaultFoodCarryingStrategy implements FoodCarryingStrategy {
-
-    private static final float RANDOMNESS_COEFFICIENT = 0.15f;
+    private static final float DECISION_COOLDOWN = 0.8f;
+    private static final int QUERY_AREA_WIDTH = 11;
 
     private final Ant ant;
+
+    private float cooldown = 0f;
 
     DefaultFoodCarryingStrategy(Ant ant) {
         this.ant = ant;
     }
 
     @Override
-    public Vector2 getDesiredDirection() {
+    public Vector2 getDesiredDirection(float dt) {
         if (!ant.carryingFood()) throw new RuntimeException("Called carrying food strategy without ant carrying any food.");
-        return getDirection();
+        return getDirection(dt);
     }
 
-    private Vector2 getDirection() {
-        List<Node> neighbours = (Main.getWorld().getGrid().getNodesInSquare(ant.getNode(), ant.getPheromoneSensingRadius()));
-        Collections.shuffle(neighbours);
+    private Vector2 getDirection(float dt) {
+        cooldown = Math.max(0, cooldown - dt);
 
-        Node attractiveNode = getAttractiveNode(neighbours);
-        return attractiveNode.getLocation().sub(ant.getLocation());
-    }
+        if (cooldown == 0) {
+            cooldown = DECISION_COOLDOWN;
 
-    private Node getAttractiveNode(List<Node> neighbours) {
-        float maxStrength = 0;
-        Node bestNode = neighbours.get(0);
-
-        for (Node node : neighbours) {
-            maxStrength = Math.max(maxStrength, node.getPheromoneStrength(Pheromone.Type.HOME));
-            if (node.getPheromoneStrength(Pheromone.Type.FOOD) == maxStrength) bestNode = node;
-            if (Main.getApp().random(1) <= RANDOMNESS_COEFFICIENT) break;
+            Node attractiveNode = getMostAttractiveNodeByPheromoneType(ant, QUERY_AREA_WIDTH, Pheromone.Type.HOME);
+            return attractiveNode.getLocation().sub(ant.getLocation());
         }
-
-        return bestNode;
+        return ant.getDesiredDirection();
     }
 }

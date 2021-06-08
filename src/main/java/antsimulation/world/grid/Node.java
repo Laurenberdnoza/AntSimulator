@@ -77,6 +77,9 @@ public class Node implements Updatable, Displayable, Locatable {
     }
 
     public void depositPheromone(Pheromone.Type pheromoneType) {
+        pheromones.values().stream()
+                .filter(pheromone -> !pheromone.getType().equals(pheromoneType))
+                .forEach(Pheromone::mask);
         pheromones.get(pheromoneType).refresh();
     }
 

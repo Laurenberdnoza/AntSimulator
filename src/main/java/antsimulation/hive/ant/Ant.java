@@ -1,6 +1,7 @@
 package antsimulation.hive.ant;
 
 import antsimulation.Main;
+import antsimulation.hive.Hive;
 import antsimulation.hive.ant.pheromone.Pheromone;
 import antsimulation.world.Displayable;
 import antsimulation.world.Locatable;
@@ -17,21 +18,21 @@ import static java.lang.Math.max;
 
 public class Ant implements Updatable, Displayable, Locatable {
 
-    static final float TURN_SPEED = 180f;
+    static final float TURN_SPEED = 300f;
 
     private static final float RADIUS = 6f;
     private static final PImage ANT_TEXTURE = Main.getApp().loadImage("ant.png");
     private static final PImage ANT_CARRYING_FOOD_TEXTURE = Main.getApp().loadImage("ant_carrying_food.png");
 
-    private static final float PHEROMONE_COOLDOWN = 2f;
-    private static final int PHEROMONE_SENSING_RADIUS = 7;
+    private static final float PHEROMONE_COOLDOWN = 0.25f;
 
     private final float movementSpeed = 60;
+    private final Hive hive;
 
     private final TurningStrategy turningStrategy = new DefaultTurningStrategy(
             this,
             new DefaultFoodCarryingStrategy(this),
-            new DefaultWanderingStrategy(this)
+            new DefaultFoodSeekingStrategy(this)
     );
 
     private Vector2 position;
@@ -42,8 +43,9 @@ public class Ant implements Updatable, Displayable, Locatable {
 
     private FoodChunk carriedFood;
 
-    public Ant(Vector2 startingLocation) {
+    public Ant(Vector2 startingLocation, Hive hive) {
         this.position = startingLocation.cpy();
+        this.hive = hive;
         this.timeUntilPheromoneDeposit = varyCooldown(PHEROMONE_COOLDOWN);
     }
 
@@ -51,6 +53,7 @@ public class Ant implements Updatable, Displayable, Locatable {
     public void update(float dt) {
         if (carryingFood()) {
             attemptToDepositPheromone(Pheromone.Type.FOOD);
+            attemptToGiveHiveFoodChunk();
         } else {
             checkForFood();
             attemptToDepositPheromone(Pheromone.Type.HOME);
@@ -59,6 +62,17 @@ public class Ant implements Updatable, Displayable, Locatable {
         turn(dt);
         move(dt);
         reduceCooldowns(dt);
+    }
+
+    private void attemptToGiveHiveFoodChunk() {
+        if (Vector2.dst2(position.x, position.y, hive.getLocation().x, hive.getLocation().y) < hive.getRadiusSquared()) {
+            giveFoodChunk(hive);
+        }
+    }
+
+    private void giveFoodChunk(Hive hive) {
+        hive.receiveFoodChunk(carriedFood);
+        carriedFood = null;
     }
 
     private void reduceCooldowns(float dt) {
@@ -73,8 +87,8 @@ public class Ant implements Updatable, Displayable, Locatable {
     }
 
     private float varyCooldown(float initialCooldown) {
-        final float rangeStartFactor = 0.75f;
-        final float rangeEndFactor = 1.25f;
+        final float rangeStartFactor = 0.7f;
+        final float rangeEndFactor = 1.15f;
 
         final float randomCoolDownFactor = Main.getApp().random(rangeStartFactor, rangeEndFactor);
         return randomCoolDownFactor * initialCooldown;
@@ -82,7 +96,7 @@ public class Ant implements Updatable, Displayable, Locatable {
 
     private void turn(float dt) {
         final float turnDelta = TURN_SPEED * dt;
-        final int modifier = (currentDirection.dot(desiredDirection) >= 0) ? 1 : -1;
+        final int modifier = (currentDirection.dot(desiredDirection.cpy().rotate90(1)) > 0) ? -1 : 1;
 
         currentDirection.rotateDeg(modifier * turnDelta);
     }
@@ -114,6 +128,14 @@ public class Ant implements Updatable, Displayable, Locatable {
     @Override
     public void display() {
         drawAnt();
+//        drawDesiredDirection();
+    }
+
+    private void drawDesiredDirection() {
+        Vector2 desiredPoint = position.cpy().add(desiredDirection);
+        Main.getApp().strokeWeight(2);
+        Main.getApp().stroke(0);
+        Main.getApp().line(position.x, position.y, desiredPoint.x, desiredPoint.y);
     }
 
     private void drawAnt() {
@@ -145,10 +167,6 @@ public class Ant implements Updatable, Displayable, Locatable {
 
     boolean carryingFood() {
         return (carriedFood != null);
-    }
-
-    int getPheromoneSensingRadius() {
-        return PHEROMONE_SENSING_RADIUS;
     }
 
     Vector2 getDesiredDirection() {

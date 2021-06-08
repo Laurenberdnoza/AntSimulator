@@ -15,6 +15,8 @@ public abstract class Pheromone implements Locatable, Displayable, Updatable {
         FOOD, HOME
     }
 
+    private static final float LIFETIME_INCREASE_UPON_REFRESH = 0.1f;
+
     private final Type pheromoneType;
 
     protected final Node parent;
@@ -57,6 +59,14 @@ public abstract class Pheromone implements Locatable, Displayable, Updatable {
     }
 
     public void refresh() {
-        lifeTime = maxLifeTime;
+        lifeTime = Math.min(maxLifeTime, lifeTime + (maxLifeTime * LIFETIME_INCREASE_UPON_REFRESH));
+    }
+
+    public void mask() {
+        lifeTime = Math.min(maxLifeTime, lifeTime - (maxLifeTime * LIFETIME_INCREASE_UPON_REFRESH));
+    }
+
+    public Pheromone.Type getType() {
+        return pheromoneType;
     }
 }
