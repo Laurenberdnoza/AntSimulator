@@ -53,6 +53,7 @@ public class Node implements Updatable, Displayable, Locatable {
 
     public void replenishFood() {
         foodSource.replenish();
+        pheromones.get(Pheromone.Type.FOOD).setIntensity(Float.MAX_VALUE);
     }
 
     public double getWidth() {
@@ -82,5 +83,9 @@ public class Node implements Updatable, Displayable, Locatable {
 
     public void maskPheromone(Pheromone.Type pheromoneType) {
         pheromones.get(pheromoneType).scaleIntensity(0.99f);
+    }
+
+    public void handleFoodSourceDepletion() {
+        pheromones.get(Pheromone.Type.FOOD).setIntensity(0);
     }
 }

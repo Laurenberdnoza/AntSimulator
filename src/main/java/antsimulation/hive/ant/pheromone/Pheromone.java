@@ -46,10 +46,18 @@ public abstract class Pheromone implements Displayable, Updatable {
     }
 
     public void addIntensity(float intensity) {
-        this.intensity += intensity;
+        // Avoid overflow.
+        if ((this.intensity + intensity) < this.intensity) this.intensity = Float.MAX_VALUE;
+        else this.intensity += intensity;
     }
 
     public void scaleIntensity(float scale) {
-        this.intensity *= scale;
+        // Avoid overflow.
+        if (scale > 1 && ((this.intensity * scale) < this.intensity)) this.intensity = Float.MAX_VALUE;
+        else this.intensity *= scale;
+    }
+
+    public void setIntensity(float intensity) {
+        this.intensity = intensity;
     }
 }

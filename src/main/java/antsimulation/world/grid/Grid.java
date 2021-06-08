@@ -15,16 +15,16 @@ public class Grid implements Updatable, Displayable {
     private final Node[][] nodes;
     private final int width;
     private final int height;
-    private final double cellWidth;
-    private final double cellHeight;
+    private final double nodeWidth;
+    private final double nodeHeight;
 
     public Grid(World parent, int width, int height) {
         this.parent = parent;
         this.nodes = new Node[height][width];
         this.width = width;
         this.height = height;
-        this.cellHeight = parent.getHeight() / (double) height;
-        this.cellWidth = parent.getWidth() / (double) width;
+        this.nodeHeight = parent.getHeight() / (double) height;
+        this.nodeWidth = parent.getWidth() / (double) width;
 
         populateGridWithNodes();
     }
@@ -32,14 +32,14 @@ public class Grid implements Updatable, Displayable {
     private void populateGridWithNodes() {
         for (int j = 0; j < nodes.length; j++) {
             for (int i = 0; i < nodes[0].length; i++) {
-                nodes[j][i] = new Node(i, j, cellWidth, cellHeight);
+                nodes[j][i] = new Node(i, j, nodeWidth, nodeHeight);
             }
         }
     }
 
     public Node getNodeAt(Vector2 location) {
-        final int y = Math.min((int) (location.y / cellHeight), height - 1);
-        final int x = Math.min((int) (location.x / cellWidth), width - 1);
+        final int y = Math.min((int) (location.y / nodeHeight), height - 1);
+        final int x = Math.min((int) (location.x / nodeWidth), width - 1);
         if (!parent.inBounds(new Vector2(x, y))) {
             throw new RuntimeException(String.format("Queried position (%d, %d) not in world bounds!", x, y));
         }
@@ -90,5 +90,9 @@ public class Grid implements Updatable, Displayable {
         for (Node[] nodeRow : nodes)
             for (Node node : nodeRow)
                 node.update(dt);
+    }
+
+    public double getNodeWidth() {
+        return nodeWidth;
     }
 }

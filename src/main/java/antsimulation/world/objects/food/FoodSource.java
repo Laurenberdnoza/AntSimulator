@@ -10,14 +10,16 @@ import java.util.Optional;
 public class FoodSource implements Displayable {
 
    private static final int STARTING_CHUNKS = 0;
-   private static final int MAX_CHUNKS = 4;
+   private static final int MAX_CHUNKS = 20;
 
    private final Vector2 position;
+   private final Node parent;
    private final float radius;
 
    private int remainingChunks = STARTING_CHUNKS;
 
    public FoodSource(Node parent) {
+      this.parent = parent;
       this.radius = (float) parent.getWidth();
       this.position = new Vector2(parent.getLocation().x, parent.getLocation().y);
    }
@@ -25,9 +27,11 @@ public class FoodSource implements Displayable {
    public Optional<FoodChunk> takeChunk() {
       if (remainingChunks >= 1) {
          remainingChunks--;
+         if (isEmpty()) parent.handleFoodSourceDepletion();
          return Optional.of(new FoodChunk());
+      } else {
+         return Optional.empty();
       }
-      return Optional.empty();
    }
 
    public void replenish() {

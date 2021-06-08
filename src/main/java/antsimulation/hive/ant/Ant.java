@@ -18,15 +18,15 @@ import static java.lang.Math.max;
 
 public class Ant implements Updatable, Displayable, Locatable {
 
-    static final float TURN_SPEED = 240f;
+    static final float TURN_SPEED = 120f;
 
     private static final float RADIUS = 6f;
     private static final PImage ANT_TEXTURE = Main.getApp().loadImage("ant.png");
     private static final PImage ANT_CARRYING_FOOD_TEXTURE = Main.getApp().loadImage("ant_carrying_food.png");
 
-    private static final float PHEROMONE_COOLDOWN = 0.25f;
+    private static final float PHEROMONE_COOLDOWN = 1f;
 
-    private final float movementSpeed = 60;
+    private final float movementSpeed = 40f;
     private final Hive hive;
 
     private final TurningStrategy turningStrategy = new DefaultTurningStrategy(
@@ -76,6 +76,7 @@ public class Ant implements Updatable, Displayable, Locatable {
         hive.receiveFoodChunk(carriedFood);
         awayFromHomeTime = 0;
         carriedFood = null;
+        turnAround();
     }
 
     private void reduceCooldowns(float dt) {
@@ -83,18 +84,16 @@ public class Ant implements Updatable, Displayable, Locatable {
     }
 
     private void maskPheromones() {
-        getNode().maskPheromone(Pheromone.Type.HOME);
+        getNode().maskPheromone(Pheromone.Type.FOOD);
     }
 
     private void attemptToDepositPheromone(Pheromone.Type pheromoneType, float dt) {
-        if (timeUntilPheromoneDeposit == 0) {
-            final float coefficient = 1f;
-            final float intensity = (float) (1000f * Math.exp(-coefficient * awayFromHomeTime));
+        final float coefficient = 0.01f;
+        final float intensity = (float) (10f * Math.exp(-coefficient * awayFromHomeTime));
 
-            getNode().depositPheromone(pheromoneType, intensity);
-            timeUntilPheromoneDeposit = varyCooldown(PHEROMONE_COOLDOWN);
-            awayFromHomeTime += dt;
-        }
+        getNode().depositPheromone(pheromoneType, intensity);
+        timeUntilPheromoneDeposit = varyCooldown(PHEROMONE_COOLDOWN);
+        awayFromHomeTime += dt;
     }
 
     private float varyCooldown(float initialCooldown) {
@@ -118,8 +117,7 @@ public class Ant implements Updatable, Displayable, Locatable {
         if (Main.getWorld().inBounds(attemptedPos)) position = attemptedPos;
         // If obstacle in front, do a 180.
         else {
-            currentDirection.rotateDeg(180);
-            desiredDirection = currentDirection.cpy();
+            turnAround();
         }
     }
 
@@ -131,6 +129,10 @@ public class Ant implements Updatable, Displayable, Locatable {
     private void takeFood(FoodChunk foodChunk) {
         carriedFood = foodChunk;
         awayFromHomeTime = 0;
+        turnAround();
+    }
+
+    private void turnAround() {
         desiredDirection.rotateDeg(180);
         currentDirection.rotateDeg(180);
     }
