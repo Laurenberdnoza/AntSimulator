@@ -21,3 +21,5 @@ java -jar build/libs/AntSimulator.jar
 ### Controls
 - **A** - Increase simulation speed (4x).
 - **S** - Pause the simulation.
+- **P** - Toggle pheromone visibility.
+
