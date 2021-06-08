@@ -19,7 +19,7 @@ java -jar build/libs/AntSimulator.jar
 ## Usage
 
 ### Controls
+- **Left Click** - Drag to place food chunks.
 - **A** - Increase simulation speed (4x).
 - **S** - Pause the simulation.
 - **P** - Toggle pheromone visibility.
-
