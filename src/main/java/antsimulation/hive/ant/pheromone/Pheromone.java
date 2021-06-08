@@ -2,30 +2,29 @@ package antsimulation.hive.ant.pheromone;
 
 import antsimulation.Main;
 import antsimulation.world.Displayable;
-import antsimulation.world.Locatable;
 import antsimulation.world.Updatable;
 import antsimulation.world.grid.Node;
-import org.mini2Dx.gdx.math.Vector2;
 
 import static java.lang.Math.max;
 
-public abstract class Pheromone implements Locatable, Displayable, Updatable {
+public abstract class Pheromone implements Displayable, Updatable {
 
     public enum Type {
         FOOD, HOME
     }
 
-    private static final float LIFETIME_INCREASE_UPON_REFRESH = 0.1f;
+    private static final float LIFETIME_INCREASE_UPON_REFRESH = 1f;
 
     private final Type pheromoneType;
 
     protected final Node parent;
+    protected float radius;
     protected float maxLifeTime;
-    protected float radius = 8f;
     protected float lifeTime = 0;
 
     public Pheromone(Node parent, float maxLifeTime, Type type) {
         this.parent = parent;
+        this.radius = (float) parent.getWidth();
         this.maxLifeTime = maxLifeTime;
         this.pheromoneType = type;
     }
@@ -49,11 +48,6 @@ public abstract class Pheromone implements Locatable, Displayable, Updatable {
         return pheromoneType;
     }
 
-    @Override
-    public Vector2 getLocation() {
-        return parent.getLocation();
-    }
-
     public float getStrength() {
         return lifeTime;
     }
@@ -63,7 +57,7 @@ public abstract class Pheromone implements Locatable, Displayable, Updatable {
     }
 
     public void mask() {
-        lifeTime = Math.min(maxLifeTime, lifeTime - (maxLifeTime * LIFETIME_INCREASE_UPON_REFRESH));
+        lifeTime = 0;
     }
 
     public Pheromone.Type getType() {

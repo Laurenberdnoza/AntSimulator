@@ -18,15 +18,15 @@ import static java.lang.Math.max;
 
 public class Ant implements Updatable, Displayable, Locatable {
 
-    static final float TURN_SPEED = 300f;
+    static final float TURN_SPEED = 360f;
 
     private static final float RADIUS = 6f;
     private static final PImage ANT_TEXTURE = Main.getApp().loadImage("ant.png");
     private static final PImage ANT_CARRYING_FOOD_TEXTURE = Main.getApp().loadImage("ant_carrying_food.png");
 
-    private static final float PHEROMONE_COOLDOWN = 0.25f;
+    private static final float PHEROMONE_COOLDOWN = 0.05f;
 
-    private final float movementSpeed = 60;
+    private final float movementSpeed = 85;
     private final Hive hive;
 
     private final TurningStrategy turningStrategy = new DefaultTurningStrategy(
