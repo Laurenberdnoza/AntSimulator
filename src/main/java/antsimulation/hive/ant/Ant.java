@@ -93,7 +93,7 @@ public class Ant implements Updatable, Displayable, Locatable {
         if (Main.getWorld().inBounds(attemptedPos)) position = attemptedPos;
         // If obstacle in front, do a 180.
         else {
-            position.add(currentDirection.cpy().setLength(currentDirection.len() * dt).rotateDeg(180));
+            currentDirection.rotateDeg(180);
             desiredDirection = currentDirection.cpy();
         }
     }
