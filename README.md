@@ -1,4 +1,9 @@
 ## Installation
+
+### Dependencies
+You will need [Java](https://www.java.com/en/download/) to run the simulation. The Gradle build tool
+should take care of the rest of the dependencies automatically.
+
 ### From source
 First, clone the repository:
 ```shell
