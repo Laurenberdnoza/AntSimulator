@@ -17,7 +17,7 @@ public class FoodPheromone extends Pheromone {
     }
 
     protected void onDisplay() {
-        Main.getApp().fill(0, 240, 0, 255 * (lifeTime / MAX_LIFE_TIME));
+        Main.getApp().fill(0, 240, 0, 255 * (intensity / MAX_LIFE_TIME));
         Main.getApp().rectMode(PConstants.CENTER);
         Main.getApp().square(parent.getLocation().x, parent.getLocation().y, radius);
     }

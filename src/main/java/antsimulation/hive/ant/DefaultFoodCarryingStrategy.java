@@ -7,7 +7,7 @@ import org.mini2Dx.gdx.math.Vector2;
 class DefaultFoodCarryingStrategy extends PheromoneSeekingStrategy implements FoodCarryingStrategy {
 
     private static final float DECISION_COOLDOWN = 0.25f;
-    private static final int QUERY_AREA_WIDTH = 13;
+    private static final int QUERY_AREA_WIDTH = 7;
 
     private final Ant ant;
 

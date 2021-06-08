@@ -27,7 +27,7 @@ public class Main extends PApplet {
         app = this;
         frameRate(FRAME_RATE);
 
-        WORLD.getSpawner().spawnHive(5000);
+        WORLD.getSpawner().spawnHive(100);
         LOGIC_POOL.start();
     }
 

@@ -9,7 +9,7 @@ import java.util.List;
 
 abstract class PheromoneSeekingStrategy {
 
-    private static final float RANDOMNESS_COEFFICIENT = 0.0f;
+    private static final float RANDOMNESS_COEFFICIENT = 0.01f;
 
     protected static Node getMostAttractiveNodeByPheromoneType(Ant ant, int queryAreaWidth, Pheromone.Type pheromoneType) {
         List<Node> neighbours = (Main.getWorld().getGrid().getNodesInSquare(ant.getNode(), queryAreaWidth));

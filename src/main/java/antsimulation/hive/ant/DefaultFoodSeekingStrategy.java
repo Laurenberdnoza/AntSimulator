@@ -8,8 +8,8 @@ import org.mini2Dx.gdx.math.Vector2;
 class DefaultFoodSeekingStrategy extends PheromoneSeekingStrategy implements FoodSeekingStrategy {
 
     private static final float DECISION_COOLDOWN = 0.25f;
-    private static final float MAX_DIRECTION_CHANGING_ANGLE = 60f;
-    private static final int QUERY_AREA_WIDTH = 13;
+    private static final float MAX_DIRECTION_CHANGING_ANGLE = 100f;
+    private static final int QUERY_AREA_WIDTH = 7;
 
     private final Ant ant;
 

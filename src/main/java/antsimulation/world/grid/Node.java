@@ -76,11 +76,11 @@ public class Node implements Updatable, Displayable, Locatable {
         return pheromones.get(type).getStrength();
     }
 
-    public void depositPheromone(Pheromone.Type pheromoneType) {
-        pheromones.get(pheromoneType).refresh();
+    public void depositPheromone(Pheromone.Type pheromoneType, float intensity) {
+        pheromones.get(pheromoneType).addIntensity(intensity);
     }
 
-    public double getHeight() {
-        return height;
+    public void maskPheromone(Pheromone.Type pheromoneType) {
+        pheromones.get(pheromoneType).scaleIntensity(0.99f);
     }
 }

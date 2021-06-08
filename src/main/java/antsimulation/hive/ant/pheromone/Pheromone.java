@@ -13,54 +13,43 @@ public abstract class Pheromone implements Displayable, Updatable {
         FOOD, HOME
     }
 
-    private static final float LIFETIME_INCREASE_UPON_REFRESH = 0.5f;
-
     private final Type pheromoneType;
 
     protected final Node parent;
     protected float radius;
     protected float maxLifeTime;
-    protected float lifeTime = 0;
+    protected float intensity = 0;
 
     public Pheromone(Node parent, float maxLifeTime, Type type) {
         this.parent = parent;
         this.radius = (float) parent.getWidth();
-        this.maxLifeTime = maxLifeTime;
         this.pheromoneType = type;
     }
 
     @Override
     public void update(float dt) {
-        lifeTime = max(0, lifeTime - dt);
+        intensity = max(0, intensity - dt);
         onUpdate();
     }
 
     @Override
     public void display() {
-        if (lifeTime > 0 && Main.getSettingsHandler().isPheromonesVisible()) onDisplay();
+        if (intensity > 0 && Main.getSettingsHandler().isPheromonesVisible()) onDisplay();
     }
 
     protected abstract void onUpdate();
 
     protected abstract void onDisplay();
 
-    public Type getPheromoneType() {
-        return pheromoneType;
-    }
-
     public float getStrength() {
-        return lifeTime;
+        return intensity;
     }
 
-    public void refresh() {
-        lifeTime = Math.min(maxLifeTime, lifeTime + (maxLifeTime * LIFETIME_INCREASE_UPON_REFRESH));
+    public void addIntensity(float intensity) {
+        this.intensity += intensity;
     }
 
-    public void mask() {
-        lifeTime = 0;
-    }
-
-    public Pheromone.Type getType() {
-        return pheromoneType;
+    public void scaleIntensity(float scale) {
+        this.intensity *= scale;
     }
 }

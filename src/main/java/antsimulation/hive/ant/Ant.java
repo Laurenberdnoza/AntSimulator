@@ -40,6 +40,7 @@ public class Ant implements Updatable, Displayable, Locatable {
     private Vector2 desiredDirection = new Vector2().setToRandomDirection().setLength(movementSpeed);
 
     private float timeUntilPheromoneDeposit;
+    private float awayFromHomeTime = 0f;
 
     private FoodChunk carriedFood;
 
@@ -52,11 +53,12 @@ public class Ant implements Updatable, Displayable, Locatable {
     @Override
     public void update(float dt) {
         if (carryingFood()) {
-            attemptToDepositPheromone(Pheromone.Type.FOOD);
+            attemptToDepositPheromone(Pheromone.Type.FOOD, dt);
             attemptToGiveHiveFoodChunk();
         } else {
             checkForFood();
-            attemptToDepositPheromone(Pheromone.Type.HOME);
+            attemptToDepositPheromone(Pheromone.Type.HOME, dt);
+            maskPheromones();
         }
         desiredDirection = turningStrategy.getDesiredDirection(dt);
         turn(dt);
@@ -72,6 +74,7 @@ public class Ant implements Updatable, Displayable, Locatable {
 
     private void giveFoodChunk(Hive hive) {
         hive.receiveFoodChunk(carriedFood);
+        awayFromHomeTime = 0;
         carriedFood = null;
     }
 
@@ -79,10 +82,18 @@ public class Ant implements Updatable, Displayable, Locatable {
         timeUntilPheromoneDeposit = max(0, timeUntilPheromoneDeposit - dt);
     }
 
-    private void attemptToDepositPheromone(Pheromone.Type pheromoneType) {
+    private void maskPheromones() {
+        getNode().maskPheromone(Pheromone.Type.HOME);
+    }
+
+    private void attemptToDepositPheromone(Pheromone.Type pheromoneType, float dt) {
         if (timeUntilPheromoneDeposit == 0) {
-            getNode().depositPheromone(pheromoneType);
+            final float coefficient = 1f;
+            final float intensity = (float) (1000f * Math.exp(-coefficient * awayFromHomeTime));
+
+            getNode().depositPheromone(pheromoneType, intensity);
             timeUntilPheromoneDeposit = varyCooldown(PHEROMONE_COOLDOWN);
+            awayFromHomeTime += dt;
         }
     }
 
@@ -119,6 +130,7 @@ public class Ant implements Updatable, Displayable, Locatable {
 
     private void takeFood(FoodChunk foodChunk) {
         carriedFood = foodChunk;
+        awayFromHomeTime = 0;
         desiredDirection.rotateDeg(180);
         currentDirection.rotateDeg(180);
     }
