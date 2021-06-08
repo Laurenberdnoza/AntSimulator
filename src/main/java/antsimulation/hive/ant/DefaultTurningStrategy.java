@@ -6,9 +6,9 @@ class DefaultTurningStrategy implements TurningStrategy {
 
     private static final float DECISION_COOLDOWN = 0.5f;
 
-    private Ant ant;
-    private FoodCarryingStrategy foodCarryingStrategy;
-    private WanderingStrategy wanderingStrategy;
+    private final Ant ant;
+    private final FoodCarryingStrategy foodCarryingStrategy;
+    private final WanderingStrategy wanderingStrategy;
     private float cooldown = DECISION_COOLDOWN;
 
     DefaultTurningStrategy(Ant ant, FoodCarryingStrategy foodCarryingStrategy, WanderingStrategy wanderingStrategy) {

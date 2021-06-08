@@ -42,7 +42,7 @@ public class FoodSource implements Displayable {
    public void display() {
       if (!isEmpty()) {
          Main.getApp().fill(30, 120, 5);
-         Main.getApp().square(position.x, position.y, radius);
+         Main.getApp().circle(position.x, position.y, radius);
       }
    }
 }
