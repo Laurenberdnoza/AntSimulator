@@ -23,10 +23,10 @@ public class Ant implements Updatable, Displayable, Locatable {
     private static final PImage ANT_CARRYING_FOOD_TEXTURE = Main.getApp().loadImage("ant_carrying_food.png");
 
     private static final float PHEROMONE_COOLDOWN = 3f;
+    private static final float RADIUS = 6f;
     private static final int PHEROMONE_SENSING_RADIUS = 7;
 
     private final float movementSpeed = 60;
-    private final float radius = 6f;
 
     private final TurningStrategy turningStrategy = new DefaultTurningStrategy(
             this,
@@ -34,9 +34,9 @@ public class Ant implements Updatable, Displayable, Locatable {
             new DefaultWanderingStrategy(this)
     );
 
-    private final Vector2 position;
-    private final Vector2 currentDirection = new Vector2().setToRandomDirection().setLength(movementSpeed / Main.getApp().frameRate);
-    private Vector2 desiredDirection = new Vector2().setToRandomDirection().setLength(movementSpeed / Main.getApp().frameRate);
+    private Vector2 position;
+    private final Vector2 currentDirection = new Vector2().setToRandomDirection().setLength(movementSpeed);
+    private Vector2 desiredDirection = new Vector2().setToRandomDirection().setLength(movementSpeed);
 
     private float timeUntilPheromoneDeposit;
 
@@ -48,21 +48,21 @@ public class Ant implements Updatable, Displayable, Locatable {
     }
 
     @Override
-    public void update() {
+    public void update(float dt) {
         if (carryingFood()) {
             attemptToDepositPheromone(Pheromone.Type.FOOD);
         } else {
             checkForFood();
             attemptToDepositPheromone(Pheromone.Type.HOME);
         }
-        desiredDirection = turningStrategy.getDesiredDirection();
-        turn();
-        move();
-        reduceCooldowns();
+        desiredDirection = turningStrategy.getDesiredDirection(dt);
+        turn(dt);
+        move(dt);
+        reduceCooldowns(dt);
     }
 
-    private void reduceCooldowns() {
-        timeUntilPheromoneDeposit = max(0, timeUntilPheromoneDeposit - (1 / Main.getApp().frameRate));
+    private void reduceCooldowns(float dt) {
+        timeUntilPheromoneDeposit = max(0, timeUntilPheromoneDeposit - dt);
     }
 
     private void attemptToDepositPheromone(Pheromone.Type pheromoneType) {
@@ -80,20 +80,20 @@ public class Ant implements Updatable, Displayable, Locatable {
         return randomCoolDownFactor * initialCooldown;
     }
 
-    private void turn() {
-        final float turnDelta = TURN_SPEED / Main.getApp().frameRate;
+    private void turn(float dt) {
+        final float turnDelta = TURN_SPEED * dt;
         final int modifier = (currentDirection.dot(desiredDirection) >= 0) ? 1 : -1;
 
         currentDirection.rotateDeg(modifier * turnDelta);
     }
 
-    private void move() {
-        Vector2 attemptedPos = this.position.cpy().add(currentDirection);
+    private void move(float dt) {
+        Vector2 attemptedPos = this.position.cpy().add(currentDirection.cpy().setLength(currentDirection.len() * dt));
 
-        if (Main.getWorld().inBounds(attemptedPos)) position.add(currentDirection);
+        if (Main.getWorld().inBounds(attemptedPos)) position = attemptedPos;
         // If obstacle in front, do a 180.
         else {
-            position.add(currentDirection.rotateDeg(180));
+            position.add(currentDirection.cpy().setLength(currentDirection.len() * dt).rotateDeg(180));
             desiredDirection = currentDirection.cpy();
         }
     }
@@ -129,10 +129,10 @@ public class Ant implements Updatable, Displayable, Locatable {
         } else {
             Main.getApp().texture(ANT_TEXTURE);
         }
-        Main.getApp().vertex(-radius, -radius, 0, 0);
-        Main.getApp().vertex(+radius, -radius, ANT_TEXTURE.width, 0);
-        Main.getApp().vertex(+radius, +radius, ANT_TEXTURE.width, ANT_TEXTURE.height);
-        Main.getApp().vertex(-radius, +radius, 0, ANT_TEXTURE.height);
+        Main.getApp().vertex(-RADIUS, -RADIUS, 0, 0);
+        Main.getApp().vertex(+RADIUS, -RADIUS, ANT_TEXTURE.width, 0);
+        Main.getApp().vertex(+RADIUS, +RADIUS, ANT_TEXTURE.width, ANT_TEXTURE.height);
+        Main.getApp().vertex(-RADIUS, +RADIUS, 0, ANT_TEXTURE.height);
         Main.getApp().endShape(PConstants.CLOSE);
 
         Main.getApp().popMatrix();

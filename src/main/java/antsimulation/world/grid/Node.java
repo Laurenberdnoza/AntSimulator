@@ -35,8 +35,8 @@ public class Node implements Updatable, Displayable, Locatable {
     }
 
     @Override
-    public void update() {
-        for (Pheromone pheromone : pheromones.values()) pheromone.update();
+    public void update(float dt) {
+        for (Pheromone pheromone : pheromones.values()) pheromone.update(dt);
     }
 
     @Override

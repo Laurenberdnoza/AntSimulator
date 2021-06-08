@@ -86,9 +86,9 @@ public class Grid implements Updatable, Displayable {
     }
 
     @Override
-    public void update() {
+    public void update(float dt) {
         for (Node[] nodeRow : nodes)
             for (Node node : nodeRow)
-                node.update();
+                node.update(dt);
     }
 }

@@ -1,24 +1,27 @@
-package antsimulation.logicthread;
+package antsimulation.threading;
 
 import antsimulation.world.World;
 
 public class LogicThread extends Thread {
 
     private final World world;
+    private final double tickRate;
+    private final float tickRateInSeconds;
 
     private boolean running = false;
-    private double tickRate;
+    private float simulationSpeedScale = 1;
 
     LogicThread(World world, double tickRate) {
         this.world = world;
         this.tickRate = tickRate;
+        this.tickRateInSeconds = (float) (tickRate / 1000000000.0);
     }
 
     @Override
     public void run() {
         running = true;
-        double delta = 0;
 
+        double delta = 0;
         long lastTime = System.nanoTime();
 
         while (running) {
@@ -27,7 +30,7 @@ public class LogicThread extends Thread {
             lastTime = now;
 
             while (delta >= 1) {
-                world.update();
+                world.update(simulationSpeedScale * tickRateInSeconds);
                 delta--;
             }
         }
@@ -37,7 +40,7 @@ public class LogicThread extends Thread {
         running = false;
     }
 
-    void setTickRate(double tickRate) {
-        this.tickRate = tickRate;
+    void setSimulationSpeedScale(float factor) {
+        this.simulationSpeedScale = factor;
     }
 }

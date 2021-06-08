@@ -20,9 +20,9 @@ public class World implements Updatable, Displayable {
     private final Set<Displayable> displayables = ConcurrentHashMap.newKeySet();
 
     @Override
-    public void update() {
-        grid.update();
-        for (Updatable updatable : updatables) updatable.update();
+    public void update(float dt) {
+        grid.update(dt);
+        for (Updatable updatable : updatables) updatable.update(dt);
     }
 
     @Override

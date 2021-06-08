@@ -4,9 +4,12 @@ import org.mini2Dx.gdx.math.Vector2;
 
 class DefaultTurningStrategy implements TurningStrategy {
 
+    private static final float DECISION_COOLDOWN = 0.5f;
+
     private Ant ant;
     private FoodCarryingStrategy foodCarryingStrategy;
     private WanderingStrategy wanderingStrategy;
+    private float cooldown = DECISION_COOLDOWN;
 
     DefaultTurningStrategy(Ant ant, FoodCarryingStrategy foodCarryingStrategy, WanderingStrategy wanderingStrategy) {
         this.ant = ant;
@@ -15,8 +18,14 @@ class DefaultTurningStrategy implements TurningStrategy {
     }
 
     @Override
-    public Vector2 getDesiredDirection() {
-        if (ant.carryingFood()) return foodCarryingStrategy.getDesiredDirection();
-        else return wanderingStrategy.getDesiredDirection();
+    public Vector2 getDesiredDirection(float dt) {
+        cooldown = Math.max(0, cooldown - dt);
+
+        if (cooldown == 0) {
+            if (ant.carryingFood()) return foodCarryingStrategy.getDesiredDirection();
+            else return wanderingStrategy.getDesiredDirection();
+        } else {
+            return ant.getDesiredDirection();
+        }
     }
 }

@@ -1,6 +1,5 @@
 package antsimulation.hive.ant.pheromone;
 
-import antsimulation.Main;
 import antsimulation.world.Displayable;
 import antsimulation.world.Locatable;
 import antsimulation.world.Removable;
@@ -35,8 +34,8 @@ public abstract class Pheromone implements Locatable, Displayable, Updatable, Re
     }
 
     @Override
-    public void update() {
-        lifeTime = max(0, lifeTime - (1 / Main.getApp().frameRate));
+    public void update(float dt) {
+        lifeTime = max(0, lifeTime - dt);
         onUpdate();
     }
 

@@ -7,7 +7,12 @@ group 'antsimulation'
 archivesBaseName = 'AntSimulator'
 
 application {
-    mainClassName = 'antsimulation.Main'
+    getMainClass().set('antsimulation.Main')
+}
+
+compileJava {
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
 }
 
 repositories {

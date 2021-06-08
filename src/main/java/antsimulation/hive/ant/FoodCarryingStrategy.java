@@ -1,4 +1,8 @@
 package antsimulation.hive.ant;
 
-interface FoodCarryingStrategy extends TurningStrategy {
+import org.mini2Dx.gdx.math.Vector2;
+
+interface FoodCarryingStrategy {
+
+    Vector2 getDesiredDirection();
 }

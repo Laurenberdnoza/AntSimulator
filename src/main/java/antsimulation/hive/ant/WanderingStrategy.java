@@ -1,4 +1,8 @@
 package antsimulation.hive.ant;
 
-interface WanderingStrategy extends TurningStrategy {
+import org.mini2Dx.gdx.math.Vector2;
+
+interface WanderingStrategy {
+
+    Vector2 getDesiredDirection();
 }

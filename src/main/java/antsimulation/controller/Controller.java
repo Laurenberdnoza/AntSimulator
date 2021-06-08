@@ -22,10 +22,14 @@ public class Controller {
         final char key = Main.getApp().key;
 
         switch (key) {
-            case 's':
-                handlePause();
             case 'a':
                 handleTimeScale();
+                break;
+            case 's':
+                handlePause();
+                break;
+            default:
+                break;
         }
     }
 

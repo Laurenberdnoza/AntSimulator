@@ -2,5 +2,5 @@ package antsimulation.world;
 
 public interface Updatable {
 
-    void update();
+    void update(float dt);
 }

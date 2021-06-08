@@ -1,7 +1,7 @@
 package antsimulation;
 
 import antsimulation.controller.Controller;
-import antsimulation.logicthread.LogicPool;
+import antsimulation.threading.ThreadPool;
 import antsimulation.world.World;
 import processing.core.PApplet;
 
@@ -10,7 +10,7 @@ public class Main extends PApplet {
     private static PApplet app;
     private static final int TICK_RATE_IN_HZ = 60;
     private static final World WORLD = new World();
-    private static final LogicPool LOGIC_POOL = new LogicPool(WORLD, TICK_RATE_IN_HZ);
+    private static final ThreadPool LOGIC_POOL = new ThreadPool(WORLD, TICK_RATE_IN_HZ);
     private static final Controller CONTROLLER = new Controller(WORLD);
 
 
@@ -54,7 +54,7 @@ public class Main extends PApplet {
         return WORLD;
     }
 
-    public static LogicPool getLogicPool() {
+    public static ThreadPool getLogicPool() {
         return LOGIC_POOL;
     }
 }

@@ -1,13 +1,13 @@
-package antsimulation.logicthread;
+package antsimulation.threading;
 
 import antsimulation.world.World;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class LogicPool {
+public class ThreadPool {
 
-    private final static double TIME_LAPSE_FACTOR = 4;
+    private final static float TIME_LAPSE_SPEED_SCALE = 4;
 
     private final double tickRate;
     private final World world;
@@ -16,7 +16,7 @@ public class LogicPool {
     private boolean fast = false;
     private Set<LogicThread> logicThreads = new HashSet<>();
 
-    public LogicPool(World world, int tickRateInHz) {
+    public ThreadPool(World world, int tickRateInHz) {
         this.world = world;
         this.tickRate = 1000000000.0 / tickRateInHz;  // To nanoseconds.
     }
@@ -29,7 +29,10 @@ public class LogicPool {
 
     private void spawnThreads() {
         logicThreads.add(new LogicThread(world, tickRate));
-        for (LogicThread logicThread : logicThreads) logicThread.start();
+        for (LogicThread logicThread : logicThreads) {
+            logicThread.setSimulationSpeedScale((fast) ? TIME_LAPSE_SPEED_SCALE : 1);
+            logicThread.start();
+        }
     }
 
     public void stop() {
@@ -45,7 +48,9 @@ public class LogicPool {
     }
 
     public void toggleTickRate() {
-         for (LogicThread logicThread : logicThreads) logicThread.setTickRate((fast) ? tickRate : (tickRate / TIME_LAPSE_FACTOR));
+         for (LogicThread logicThread : logicThreads) {
+             logicThread.setSimulationSpeedScale((fast) ? 1 : TIME_LAPSE_SPEED_SCALE);
+         }
          fast = !fast;
     }
 }
