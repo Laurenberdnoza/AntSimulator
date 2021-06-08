@@ -1,5 +1,5 @@
-### Installation
-#### From source
+## Installation
+### From source
 First, clone the repository:
 ```shell
 git clone https://github.com/gekoke/ants
@@ -16,8 +16,8 @@ To build and run a jar file:
 java -jar build/libs/AntSimulator.jar
 ```
 
-### Usage
+## Usage
 
-#### Controls
+### Controls
 - **A** - Increase simulation speed (4x).
 - **S** - Pause the simulation.
