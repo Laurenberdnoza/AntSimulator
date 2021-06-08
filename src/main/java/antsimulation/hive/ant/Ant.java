@@ -18,15 +18,15 @@ import static java.lang.Math.max;
 
 public class Ant implements Updatable, Displayable, Locatable {
 
-    static final float TURN_SPEED = 360f;
+    static final float TURN_SPEED = 240f;
 
     private static final float RADIUS = 6f;
     private static final PImage ANT_TEXTURE = Main.getApp().loadImage("ant.png");
     private static final PImage ANT_CARRYING_FOOD_TEXTURE = Main.getApp().loadImage("ant_carrying_food.png");
 
-    private static final float PHEROMONE_COOLDOWN = 0.05f;
+    private static final float PHEROMONE_COOLDOWN = 0.25f;
 
-    private final float movementSpeed = 85;
+    private final float movementSpeed = 60;
     private final Hive hive;
 
     private final TurningStrategy turningStrategy = new DefaultTurningStrategy(
@@ -119,6 +119,8 @@ public class Ant implements Updatable, Displayable, Locatable {
 
     private void takeFood(FoodChunk foodChunk) {
         carriedFood = foodChunk;
+        desiredDirection.rotateDeg(180);
+        currentDirection.rotateDeg(180);
     }
 
     Node getNode() {
@@ -171,5 +173,11 @@ public class Ant implements Updatable, Displayable, Locatable {
 
     Vector2 getDesiredDirection() {
         return desiredDirection.cpy();
+    }
+
+    public Node getSensorNode() {
+        final Vector2 sensorPosition = position.cpy().add(currentDirection.cpy().setLength(4 * RADIUS));
+        if (Main.getWorld().inBounds(sensorPosition)) return Main.getWorld().getGrid().getNodeAt(sensorPosition);
+        return getNode();
     }
 }

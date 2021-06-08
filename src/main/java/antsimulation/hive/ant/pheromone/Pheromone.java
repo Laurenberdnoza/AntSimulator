@@ -13,7 +13,7 @@ public abstract class Pheromone implements Displayable, Updatable {
         FOOD, HOME
     }
 
-    private static final float LIFETIME_INCREASE_UPON_REFRESH = 1f;
+    private static final float LIFETIME_INCREASE_UPON_REFRESH = 0.5f;
 
     private final Type pheromoneType;
 

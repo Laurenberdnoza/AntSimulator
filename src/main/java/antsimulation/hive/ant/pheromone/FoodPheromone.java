@@ -6,7 +6,7 @@ import processing.core.PConstants;
 
 public class FoodPheromone extends Pheromone {
 
-    private static final float MAX_LIFE_TIME = 1.5f;
+    private static final float MAX_LIFE_TIME = 5f;
 
     public FoodPheromone(Node parent) {
         super(parent, MAX_LIFE_TIME, Type.FOOD);
