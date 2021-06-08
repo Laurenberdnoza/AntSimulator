@@ -3,14 +3,13 @@ package antsimulation.hive.ant.pheromone;
 import antsimulation.Main;
 import antsimulation.world.Displayable;
 import antsimulation.world.Locatable;
-import antsimulation.world.Removable;
 import antsimulation.world.Updatable;
 import antsimulation.world.grid.Node;
 import org.mini2Dx.gdx.math.Vector2;
 
 import static java.lang.Math.max;
 
-public abstract class Pheromone implements Locatable, Displayable, Updatable, Removable {
+public abstract class Pheromone implements Locatable, Displayable, Updatable {
 
     public enum Type {
         FOOD, HOME
@@ -27,11 +26,6 @@ public abstract class Pheromone implements Locatable, Displayable, Updatable, Re
         this.parent = parent;
         this.maxLifeTime = maxLifeTime;
         this.pheromoneType = type;
-    }
-
-    @Override
-    public boolean isToBeRemoved() {
-        return (lifeTime == 0);
     }
 
     @Override
