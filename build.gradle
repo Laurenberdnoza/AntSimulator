@@ -16,28 +16,17 @@ compileJava {
 }
 
 repositories {
-    flatDir {
-        dirs 'libs'
-    }
     mavenCentral()
 }
 
 dependencies {
-    implementation name: 'processing'
-    implementation name: 'gluegen-rt'
-    implementation name: 'gluegen-rt-natives-linux-amd64'
-    implementation name: 'gluegen-rt-natives-windows-amd64'
-    implementation name: 'gluegen-rt-natives-macosx-universal'
-    implementation name: 'jogl-all'
-    implementation name: 'jogl-all-natives-linux-amd64'
-    implementation name: 'jogl-all-natives-macosx-universal'
-    implementation name: 'jogl-all-natives-windows-amd64'
+    implementation fileTree(dir: 'libs', include: '*.jar')
     implementation 'org.mini2Dx:gdx-math:1.9.13'
 }
 
 jar {
     manifest {
-        attributes "Main-Class": "$mainClassName"
+        attributes "Main-Class": "antsimulation.Main"
     }
 
     from {
