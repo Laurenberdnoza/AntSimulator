@@ -1,12 +1,19 @@
-![picture of the app](ants.png)
-## Installation
 
-### Dependencies
+# Overview 🐜
+A simple ant simulator that attempts to mimic and visualize the pheromone-based system some ant colonies in nature employ to find and retrieve food.
+
+![picture of the app](ants.png)
+
+# Installation
+## Dependencies
 You will need [Java](https://www.java.com/en/download/) to run the simulation. 
 
 To build from source, you will need a Java Development Kit (JDK), available from either [here](https://jdk.java.net/) or your package manager of choice.
 
-### From source
+## Downloads
+Get the latest version from [releases](https://github.com/gekoke/AntSimulator/releases) and run it using `java -jar AntSimulator.jar`
+
+## Build from source
 First, clone the repository:
 ```shell
 git clone https://github.com/gekoke/ants
@@ -23,9 +30,8 @@ To build and run a jar file:
 java -jar build/libs/AntSimulator.jar
 ```
 
-## Usage
-
-### Controls
+# Usage
+## Controls
 - **Mouse** - Drag to place food chunks or walls.
 - **A** - Toggle ant visibility.
 - **W** - Toggle between food/wall mode.
