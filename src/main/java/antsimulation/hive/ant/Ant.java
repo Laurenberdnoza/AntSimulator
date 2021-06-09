@@ -144,14 +144,6 @@ public class Ant implements Updatable, Displayable, Locatable {
     @Override
     public void display() {
         drawAnt();
-//        drawDesiredDirection();
-    }
-
-    private void drawDesiredDirection() {
-        Vector2 desiredPoint = position.cpy().add(desiredDirection);
-        Main.getApp().strokeWeight(2);
-        Main.getApp().stroke(0);
-        Main.getApp().line(position.x, position.y, desiredPoint.x, desiredPoint.y);
     }
 
     private void drawAnt() {
