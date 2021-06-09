@@ -26,7 +26,7 @@ public class Controller {
         switch (key) {
             case 'a':
                 handleAntVisiblityToggle();
-                break
+                break;
             case 's':
                 handleTimeScale();
                 break;
