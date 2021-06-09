@@ -16,6 +16,7 @@ public class Wall implements Displayable {
     @Override
     public void display() {
         if (isPresent) {
+            Main.getApp().noStroke();
             Main.getApp().fill(30, 30, 30);
             Main.getApp().square(parent.getLocation().x, parent.getLocation().y, (float) parent.getWidth());
         }

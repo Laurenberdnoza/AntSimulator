@@ -45,6 +45,7 @@ public class FoodSource implements Displayable {
    @Override
    public void display() {
       if (!isEmpty()) {
+         Main.getApp().noStroke();
          Main.getApp().fill(30, 120, 5);
          Main.getApp().circle(position.x, position.y, radius);
       }
