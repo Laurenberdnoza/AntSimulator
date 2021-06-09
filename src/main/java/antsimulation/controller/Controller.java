@@ -25,20 +25,27 @@ public class Controller {
 
         switch (key) {
             case 'a':
-                handleTimeScale();
-                break;
+                handleAntVisiblityToggle();
+                break
             case 's':
-                handlePause();
-                break;
-            case 'p':
-                handlePheromoneToggle();
+                handleTimeScale();
                 break;
             case 'w':
                 handleWallToggle();
                 break;
+            case 'f':
+                handlePheromoneToggle();
+                break;
+            case 'p':
+                handlePause();
+                break;
             default:
                 break;
         }
+    }
+
+    private void handleAntVisiblityToggle() {
+        Main.getSettingsHandler().toggleAntVisibility();
     }
 
     private void handlePause() {

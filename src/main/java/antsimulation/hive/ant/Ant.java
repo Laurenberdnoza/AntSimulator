@@ -153,7 +153,7 @@ public class Ant implements Updatable, Displayable, Locatable {
 
     @Override
     public void display() {
-        drawAnt();
+        if (Main.getSettingsHandler().isAntsVisible()) drawAnt();
     }
 
     private void drawAnt() {
