@@ -1,3 +1,4 @@
+![picture of the app](ants.png)
 ## Installation
 
 ### Dependencies
