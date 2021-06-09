@@ -88,7 +88,7 @@ public class Node implements Updatable, Displayable, Locatable {
     }
 
     public void maskPheromone(Pheromone.Type pheromoneType) {
-        pheromones.get(pheromoneType).scaleIntensity(0.9f);
+        pheromones.get(pheromoneType).scaleIntensity(0.95f);
     }
 
     public void handleFoodSourceDepletion() {

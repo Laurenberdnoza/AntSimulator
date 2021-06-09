@@ -17,7 +17,6 @@ public class Hive implements Displayable, Locatable, Updatable {
 
     private static final float RADIUS = 16;
     private static final float RADIUS_SQUARED = RADIUS * RADIUS;
-    private static final float PHEROMONE_RADIUS = 48f;
 
     private final Vector2 location;
 
@@ -47,7 +46,7 @@ public class Hive implements Displayable, Locatable, Updatable {
         Grid worldGrid = Main.getWorld().getGrid();
         List<Node> homeNodes = worldGrid.getNodesInSquare(
                 worldGrid.getNodeAt(location),
-                Math.max(1, ((int) (worldGrid.getNodeWidth() / PHEROMONE_RADIUS)))
+                Math.max(1, ((int) (worldGrid.getNodeWidth() / RADIUS)))
         );
 
         for (Node node : homeNodes) node.depositPheromone(Pheromone.Type.HOME, Float.MAX_VALUE);
