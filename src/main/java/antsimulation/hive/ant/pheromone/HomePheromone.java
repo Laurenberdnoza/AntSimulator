@@ -17,6 +17,7 @@ public class HomePheromone extends Pheromone {
     }
 
     protected void onDisplay() {
+        Main.getApp().noStroke();
         Main.getApp().fill(40, 0, 120, 255 * (intensity / MAX_LIFE_TIME));
         Main.getApp().rectMode(PConstants.CENTER);
         Main.getApp().square(parent.getLocation().x, parent.getLocation().y, radius);

@@ -46,7 +46,7 @@ public class Hive implements Displayable, Locatable, Updatable {
         Grid worldGrid = Main.getWorld().getGrid();
         List<Node> homeNodes = worldGrid.getNodesInSquare(
                 worldGrid.getNodeAt(location),
-                Math.max(1, ((int) (worldGrid.getNodeWidth() / RADIUS)))
+                Math.max(1, ((int) (worldGrid.getNodeWidth() / (2 * RADIUS))))
         );
 
         for (Node node : homeNodes) node.depositPheromone(Pheromone.Type.HOME, Float.MAX_VALUE);
