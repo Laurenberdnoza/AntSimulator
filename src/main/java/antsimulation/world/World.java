@@ -45,6 +45,11 @@ public class World implements Updatable, Displayable {
         );
     }
 
+    public boolean isObstacle(Vector2 position) {
+        if (!inBounds(position)) return false;
+        return grid.getNodeAt(position).isObstacle();
+    }
+
     public Vector2 getRandomLocation() {
         float x = Main.getApp().random(0, WIDTH);
         float y = Main.getApp().random(0, HEIGHT);

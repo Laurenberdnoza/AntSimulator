@@ -6,7 +6,8 @@ import org.mini2Dx.gdx.math.Vector2;
 
 class DefaultFoodCarryingStrategy extends PheromoneSeekingStrategy implements FoodCarryingStrategy {
 
-    private static final float DECISION_COOLDOWN = 0.1f;
+    private static final float DECISION_COOLDOWN = 0.05f;
+    private static final float RANDOMNESS_COEFFICIENT = 0.12f;
     private static final int QUERY_AREA_WIDTH = 5;
 
     private final Ant ant;
@@ -29,7 +30,7 @@ class DefaultFoodCarryingStrategy extends PheromoneSeekingStrategy implements Fo
         if (cooldown == 0) {
             cooldown = DECISION_COOLDOWN;
 
-            Node attractiveNode = getMostAttractiveNodeByPheromoneType(ant, QUERY_AREA_WIDTH, Pheromone.Type.HOME);
+            Node attractiveNode = getMostAttractiveNodeByPheromoneType(ant, QUERY_AREA_WIDTH, Pheromone.Type.HOME, RANDOMNESS_COEFFICIENT);
             return attractiveNode.getLocation().sub(ant.getLocation());
         }
         return ant.getDesiredDirection();

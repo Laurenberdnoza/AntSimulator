@@ -24,9 +24,9 @@ public class Ant implements Updatable, Displayable, Locatable {
     private static final PImage ANT_TEXTURE = Main.getApp().loadImage("ant.png");
     private static final PImage ANT_CARRYING_FOOD_TEXTURE = Main.getApp().loadImage("ant_carrying_food.png");
 
-    private static final float PHEROMONE_COOLDOWN = 1f;
+    private static final float PHEROMONE_COOLDOWN = 0.22f;
 
-    private final float movementSpeed = 40f;
+    private final float movementSpeed = 35f;
     private final Hive hive;
 
     private final TurningStrategy turningStrategy = new DefaultTurningStrategy(
@@ -58,11 +58,11 @@ public class Ant implements Updatable, Displayable, Locatable {
         } else {
             checkForFood();
             attemptToDepositPheromone(Pheromone.Type.HOME, dt);
-            maskPheromones();
         }
         desiredDirection = turningStrategy.getDesiredDirection(dt);
         turn(dt);
         move(dt);
+        maskPheromones();
         reduceCooldowns(dt);
     }
 
@@ -88,12 +88,14 @@ public class Ant implements Updatable, Displayable, Locatable {
     }
 
     private void attemptToDepositPheromone(Pheromone.Type pheromoneType, float dt) {
-        final float coefficient = 0.01f;
-        final float intensity = (float) (10f * Math.exp(-coefficient * awayFromHomeTime));
+        if (timeUntilPheromoneDeposit == 0) {
+            final float coefficient = 0.07f;
+            final float intensity = (float) (40f * Math.exp(-coefficient * awayFromHomeTime));
 
-        getNode().depositPheromone(pheromoneType, intensity);
-        timeUntilPheromoneDeposit = varyCooldown(PHEROMONE_COOLDOWN);
-        awayFromHomeTime += dt;
+            getNode().depositPheromone(pheromoneType, intensity);
+            timeUntilPheromoneDeposit = varyCooldown(PHEROMONE_COOLDOWN);
+            awayFromHomeTime += dt;
+        }
     }
 
     private float varyCooldown(float initialCooldown) {
@@ -115,7 +117,6 @@ public class Ant implements Updatable, Displayable, Locatable {
         Vector2 attemptedPos = this.position.cpy().add(currentDirection.cpy().setLength(currentDirection.len() * dt));
 
         if (Main.getWorld().inBounds(attemptedPos)) position = attemptedPos;
-        // If obstacle in front, do a 180.
         else {
             turnAround();
         }

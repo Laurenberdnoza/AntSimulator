@@ -9,9 +9,7 @@ import java.util.List;
 
 abstract class PheromoneSeekingStrategy {
 
-    private static final float RANDOMNESS_COEFFICIENT = 0.1f;
-
-    protected static Node getMostAttractiveNodeByPheromoneType(Ant ant, int queryAreaWidth, Pheromone.Type pheromoneType) {
+    protected static Node getMostAttractiveNodeByPheromoneType(Ant ant, int queryAreaWidth, Pheromone.Type pheromoneType, float randomnessCoefficient) {
         List<Node> neighbours = (Main.getWorld().getGrid().getNodesInSquare(ant.getSensorNode(), queryAreaWidth));
         Collections.shuffle(neighbours);
 
@@ -21,7 +19,7 @@ abstract class PheromoneSeekingStrategy {
         for (Node node : neighbours) {
             maxStrength = Math.max(maxStrength, node.getPheromoneStrength(pheromoneType));
             if (node.getPheromoneStrength(pheromoneType) == maxStrength) bestNode = node;
-            if (Main.getApp().random(0, 1) <= RANDOMNESS_COEFFICIENT) break;
+            if (Main.getApp().random(0, 1) <= randomnessCoefficient) break;
         }
 
         return bestNode;

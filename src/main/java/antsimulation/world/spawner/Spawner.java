@@ -1,5 +1,6 @@
 package antsimulation.world.spawner;
 
+import antsimulation.Main;
 import antsimulation.hive.Hive;
 import antsimulation.world.World;
 
@@ -12,7 +13,7 @@ public class Spawner {
     }
 
     public void spawnHive(int amountOfAnts) {
-        Hive newHive = new Hive(world.getRandomLocation(), amountOfAnts);
+        Hive newHive = new Hive(world.getRandomLocationAwayFromEdgeBy(Main.getWorld().getWidth() / 10f), amountOfAnts);
         world.addEntity(newHive);
     }
 }
