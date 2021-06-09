@@ -90,6 +90,9 @@ public class Ant implements Updatable, Displayable, Locatable {
 
     private void attemptToDepositPheromone(Pheromone.Type pheromoneType, float dt) {
         if (timeUntilPheromoneDeposit == 0) {
+            // Tweaked version of Jean Tampon's code snippet in their ant simulator.
+            // This makes sure ants that have travelled for longer without making it back to the hive
+            // (who are presumably also farther away from the hive) deposit less pheromones.
             final float coefficient = 0.01f;
             final float intensity = (float) (40f * Math.exp(-coefficient * awayFromHomeTime));
 
