@@ -25,7 +25,7 @@ public class Controller {
 
         switch (key) {
             case 'a':
-                handleAntVisiblityToggle();
+                handleAntVisibilityToggle();
                 break;
             case 's':
                 handleTimeScale();
@@ -44,7 +44,7 @@ public class Controller {
         }
     }
 
-    private void handleAntVisiblityToggle() {
+    private void handleAntVisibilityToggle() {
         Main.getSettingsHandler().toggleAntVisibility();
     }
 
