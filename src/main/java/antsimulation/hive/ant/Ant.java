@@ -62,6 +62,7 @@ public class Ant implements Updatable, Displayable, Locatable {
         desiredDirection = turningStrategy.getDesiredDirection(dt);
         turn(dt);
         move(dt);
+        rescueIfStuck();
         maskPheromones();
         reduceCooldowns(dt);
     }
@@ -89,13 +90,21 @@ public class Ant implements Updatable, Displayable, Locatable {
 
     private void attemptToDepositPheromone(Pheromone.Type pheromoneType, float dt) {
         if (timeUntilPheromoneDeposit == 0) {
-            final float coefficient = 0.07f;
+            final float coefficient = 0.01f;
             final float intensity = (float) (40f * Math.exp(-coefficient * awayFromHomeTime));
 
             getNode().depositPheromone(pheromoneType, intensity);
             timeUntilPheromoneDeposit = varyCooldown(PHEROMONE_COOLDOWN);
             awayFromHomeTime += dt;
         }
+    }
+
+    private void rescueIfStuck() {
+        if (Main.getWorld().isObstacle(position)) returnToHive();
+    }
+
+    private void returnToHive() {
+        position = hive.getLocation().cpy();
     }
 
     private float varyCooldown(float initialCooldown) {
@@ -116,7 +125,7 @@ public class Ant implements Updatable, Displayable, Locatable {
     private void move(float dt) {
         Vector2 attemptedPos = this.position.cpy().add(currentDirection.cpy().setLength(currentDirection.len() * dt));
 
-        if (Main.getWorld().inBounds(attemptedPos)) position = attemptedPos;
+        if (Main.getWorld().inBounds(attemptedPos) && !Main.getWorld().isObstacle(attemptedPos)) position = attemptedPos;
         else {
             turnAround();
         }

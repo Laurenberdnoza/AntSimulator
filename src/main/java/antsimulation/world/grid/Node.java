@@ -8,6 +8,7 @@ import antsimulation.world.Locatable;
 import antsimulation.world.Updatable;
 import antsimulation.world.objects.food.FoodChunk;
 import antsimulation.world.objects.food.FoodSource;
+import antsimulation.world.objects.food.Wall;
 import org.mini2Dx.gdx.math.Vector2;
 
 import java.util.HashMap;
@@ -19,11 +20,12 @@ public class Node implements Updatable, Displayable, Locatable {
     private final int xIndex;
     private final int yIndex;
     private final double width;
-
     private final double height;
+
+    private final Map<Pheromone.Type, Pheromone> pheromones = new HashMap<>();
     private final Vector2 position;
     private final FoodSource foodSource;
-    private final Map<Pheromone.Type, Pheromone> pheromones = new HashMap<>();
+    private final Wall wall;
 
     Node(int xIndex, int yIndex, double width, double height) {
         this.xIndex = xIndex;
@@ -32,6 +34,7 @@ public class Node implements Updatable, Displayable, Locatable {
         this.height = height;
         this.position = new Vector2((float) ((this.xIndex + 0.5) * width), (float) ((this.yIndex + 0.5f) * height));
         this.foodSource = new FoodSource(this);
+        this.wall = new Wall(this);
         pheromones.put(Pheromone.Type.HOME, new HomePheromone(this));
         pheromones.put(Pheromone.Type.FOOD, new FoodPheromone(this));
     }
@@ -43,8 +46,9 @@ public class Node implements Updatable, Displayable, Locatable {
 
     @Override
     public void display() {
-        foodSource.display();
         for (Pheromone pheromone : pheromones.values()) pheromone.display();
+        foodSource.display();
+        wall.display();
     }
 
     public Optional<FoodChunk> giveFood() {
@@ -53,6 +57,7 @@ public class Node implements Updatable, Displayable, Locatable {
 
     public void replenishFood() {
         foodSource.replenish();
+        wall.setPresent(false);
         pheromones.get(Pheromone.Type.FOOD).setIntensity(Float.MAX_VALUE);
     }
 
@@ -74,6 +79,7 @@ public class Node implements Updatable, Displayable, Locatable {
     }
 
     public float getPheromoneStrength(Pheromone.Type type) {
+        if (wall.isPresent()) return 0;
         return pheromones.get(type).getStrength();
     }
 
@@ -90,6 +96,10 @@ public class Node implements Updatable, Displayable, Locatable {
     }
 
     public boolean isObstacle() {
-        return false;
+        return (wall.isPresent());
+    }
+
+    public void addWall() {
+        wall.setPresent(true);
     }
 }

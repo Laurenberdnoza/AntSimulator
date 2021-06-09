@@ -15,7 +15,9 @@ public class Controller {
 
     public void handleMouseDrag() {
         Node targetNode = world.getGrid().getNodeAt(new Vector2(Main.getApp().mouseX, Main.getApp().mouseY));
-        targetNode.replenishFood();
+
+        if (!Main.getSettingsHandler().isWallModeActive()) targetNode.replenishFood();
+        else targetNode.addWall();
     }
 
     public void handleKeyPress() {
@@ -30,6 +32,9 @@ public class Controller {
                 break;
             case 'p':
                 handlePheromoneToggle();
+                break;
+            case 'w':
+                handleWallToggle();
                 break;
             default:
                 break;
@@ -46,5 +51,9 @@ public class Controller {
 
     private void handlePheromoneToggle() {
         Main.getSettingsHandler().togglePheromoneVisibility();
+    }
+
+    private void handleWallToggle() {
+        Main.getSettingsHandler().toggleWallMode();
     }
 }

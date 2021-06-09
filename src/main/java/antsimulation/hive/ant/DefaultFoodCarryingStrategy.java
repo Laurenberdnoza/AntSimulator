@@ -7,7 +7,7 @@ import org.mini2Dx.gdx.math.Vector2;
 class DefaultFoodCarryingStrategy extends PheromoneSeekingStrategy implements FoodCarryingStrategy {
 
     private static final float DECISION_COOLDOWN = 0.05f;
-    private static final float RANDOMNESS_COEFFICIENT = 0.12f;
+    private static final float RANDOMNESS_COEFFICIENT = 0.15f;
     private static final int QUERY_AREA_WIDTH = 5;
 
     private final Ant ant;
