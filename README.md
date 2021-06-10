@@ -32,9 +32,11 @@ java -jar build/libs/AntSimulator.jar
 
 # Usage
 ## Controls
-- **Mouse** - Drag to place food chunks or walls.
-- **A** - Toggle ant visibility.
-- **W** - Toggle between food/wall mode.
-- **S** - Increase simulation speed (4x).
-- **F** - Toggle pheromone visibility.
-- **P** - Pause the simulation.
+| Key | Action |
+| --- | ---    |
+| **Mouse** | Place food chunks or walls |
+| **A**     | Toggle ant visibility      |
+| **W**     | Toggle between food/wall mode |
+| **S**     | Increase simulation speed (4x) |
+| **F**     | Toggle pheromone visibility |
+| **P**     | Pause the simulation |
